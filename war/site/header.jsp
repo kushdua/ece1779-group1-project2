@@ -36,7 +36,10 @@
             <%= (request.getRequestURI().contains("view_games.jsp"))?
                     "<li><a href='view.jsp' class='active'>View Games</a></li>" : 
                     "<li><a href='view.jsp'>View Gallery</a></li>" %>
-            <li><a href="<%= userService.createLogoutURL("/") %>">Logout</a></li>
+            <% if(user!=null)
+            { %>
+            	<li><a href="<%= userService.createLogoutURL("/") %>">Logout</a></li>
+            <% } %>
             <%-- <%= (request!=null && request.getRequestURI().contains("welcome.jsp?logout=true"))?
                     "<li><a href='welcome.jsp?logout=true' class='active'>Logout</a></li>" : 
                     "<li><a href='welcome.jsp?logout=true'>Logout</a></li>" %> --%>

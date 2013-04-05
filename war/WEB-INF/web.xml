@@ -89,6 +89,26 @@
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
+	
+	<servlet>
+        <servlet-name>welcome</servlet-name>
+        <jsp-file>/site/welcome.jsp</jsp-file>
+    </servlet>
+	
+	<servlet>
+        <servlet-name>header</servlet-name>
+        <jsp-file>/site/header.jsp</jsp-file>
+    </servlet>
+	
+	<servlet>
+        <servlet-name>stats</servlet-name>
+        <jsp-file>/site/stats.jsp</jsp-file>
+    </servlet>
+	
+	<servlet>
+        <servlet-name>view_games</servlet-name>
+        <jsp-file>/site/view_games.jsp</jsp-file>
+    </servlet>
  <servlet>
   <servlet-name>SystemServiceServlet</servlet-name>
   <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
