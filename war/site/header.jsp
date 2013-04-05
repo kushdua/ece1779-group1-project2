@@ -21,7 +21,7 @@
 
 <div class="navbar navbar-inverse">
     <div class="navbar-inner">
-        <a class="brand" href="#">ECE1779 AWS Project</a>
+        <a class="brand" href="#">ECE1779 AppEngine Project</a>
         <ul class="nav">
             <%= (request==null || request.getRequestURI().contains("welcome.jsp"))?
             		"<li><a href='welcome.jsp' class='active'>Home</a></li>" : 
@@ -36,7 +36,7 @@
             <%= (request.getRequestURI().contains("view_games.jsp"))?
                     "<li><a href='view.jsp' class='active'>View Games</a></li>" : 
                     "<li><a href='view.jsp'>View Gallery</a></li>" %>
-            <a href="<%= userService.createLogoutURL("/") %>">Logout</a>
+            <li><a href="<%= userService.createLogoutURL("/") %>">Logout</a></li>
             <%-- <%= (request!=null && request.getRequestURI().contains("welcome.jsp?logout=true"))?
                     "<li><a href='welcome.jsp?logout=true' class='active'>Logout</a></li>" : 
                     "<li><a href='welcome.jsp?logout=true'>Logout</a></li>" %> --%>
