@@ -20,19 +20,17 @@
 
 <div class="container">
   
-  <% 
-  UserService userService = UserServiceFactory.getUserService();
-  User user = userService.getCurrentUser();
-  
-  if(user==null)
-  {
-  	response.sendRedirect(userService.createLoginURL(""));
-  }
-  
-  %>
-  
   Welcome to GTTT (Google Tic-Tac-Toe). Please use the navigation menu to browse the rest of the site.
   
+  <br />
+  
+  <% 
+  if(user==null)
+  {
+	  %>Please <a href="<%= userService.createLoginURL("/") %>">Login</a> to continue.
+  	<%
+  }
+  %>
 </div> <!-- /container -->
 
 <script src="http://code.jquery.com/jquery-latest.js"></script>

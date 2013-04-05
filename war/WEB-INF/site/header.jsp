@@ -1,6 +1,7 @@
 <%@page import="com.google.appengine.api.users.User" %>
 <%@page import="com.google.appengine.api.users.UserService" %>
 <%@page import="com.google.appengine.api.users.UserServiceFactory" %>
+<%@page import="ece1779.appengine.*" %>
 
 <%
    boolean loggedIn=false;
@@ -50,10 +51,10 @@
   <% userPrefs.setErrorMessages("");
   	 userPrefs.save(); %> 
 </div> 
-<% } else if(request!=null && userPrefs != null && userPrefs.getSuccessMessages().length!=0) { %>
+<% } else if(request!=null && userPrefs != null && userPrefs.getSuccessMessages().length()!=0) { %>
 <div class="alert alert-success">  
   <a class="close" data-dismiss="alert">×</a>  
-  <strong>Success: </strong> <%= userPrefs.getSuccessMessages(); %>  
+  <strong>Success: </strong> <%= userPrefs.getSuccessMessages() %>  
   <% userPrefs.setSuccessMessages("");
   	 userPrefs.save(); %>
 </div> 
