@@ -1,9 +1,14 @@
 package ece1779.appengine;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.Id;
+import javax.persistence.Query;
+
 import com.google.appengine.api.users.User;
 
 @Entity(name = "TTTGame")
@@ -48,11 +53,45 @@ public class TTTGame {
     
     public TTTGame(int gameId)
     {
-    	
+    	this.user1=null;
+    	this.user2=null;
+    	this.gameId = gameId;
+    	this.setActive(false);
+    	this.setAccepted(false);
     }
 
     public int getGameId() {
         return gameId;
+    }
+    
+    /**
+     * Get list of games for a user.
+     * @param userId	User ID for which to return list of games
+     * @return			Array of game IDs
+     */
+    public static ArrayList<TTTGame> getGames(int userId)
+    {
+    	ArrayList<TTTGame> games = new ArrayList<TTTGame>();
+    	EntityManager em = EMF.get().createEntityManager();
+    	
+		try
+		{
+			Query query = null;
+            List<TTTGame> results = null;
+
+            // Query for all entities of a kind
+            query = em.createQuery("SELECT g from TTTGame g WHERE user1=:user1 OR user2=:user2");
+            query.setParameter("user1", userId);
+            query.setParameter("user2", userId);
+            results = (List<TTTGame>) query.getResultList();
+            games.addAll(results);
+		}
+		finally
+		{
+			em.close();
+		}
+    	
+    	return games;
     }
 
     public static TTTGame getGame(int gameId) {
