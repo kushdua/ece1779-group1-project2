@@ -79,7 +79,7 @@
 	
 	<servlet>
     	<servlet-name>Authenticate</servlet-name>
-    	<servlet-class>ece1779.appengine.fileupload.Authenticate</servlet-class>
+    	<servlet-class>ece1779.appengine.Authenticate</servlet-class>
   	</servlet>
   	<servlet-mapping>
    	 	<servlet-name>Authenticate</servlet-name>
