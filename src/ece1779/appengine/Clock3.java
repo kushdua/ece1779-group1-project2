@@ -31,7 +31,7 @@ public class Clock3 extends HttpServlet {
             UserPrefs userPrefs = UserPrefs.getPrefsForUser(user);
             int tzOffset = 0;
             if (userPrefs != null) {
-                tzOffset = userPrefs.getTzOffset();
+//                tzOffset = userPrefs.getTzOffset();
             }
 
             navBar = "<p>Welcome, " + user.getNickname() + "! You can <a href=\"" +

@@ -1,9 +1,7 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
-<title>Welcome</title>
+<title>Play TicTacToe</title>
 <!-- Sign in template from Bootstrap site modified for ECE1779 AWS project -->
 <!-- Bootstrap -->
 <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -18,24 +16,21 @@
 
 <%@ include file="header.jsp" %>
 
+<!-- if parameter not specified to page, all uploaded images displayed; else only transformations for specified image are displayed by server side script which writes out page -->
 <div class="container">
-  
-  <% 
-  UserService userService = UserServiceFactory.getUserService();
-  User user = userService.getCurrentUser();
-  
-  if(user==null)
-  {
-  	response.sendRedirect(userService.createLoginURL(""));
-  }
-  
-  %>
-  
-  Welcome to GTTT (Google Tic-Tac-Toe). Please use the navigation menu to browse the rest of the site.
-  
+    <ul class="thumbnails">
+		<li class="span3"></li>
+
+<%
+    //Grab contents of specified game.
+    int gameId = Integer.parseInt(request.getParameter("gameID"));
+%>
+       
+    </ul>
 </div> <!-- /container -->
 
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
+

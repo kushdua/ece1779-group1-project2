@@ -20,9 +20,9 @@ public class PrefsServlet extends HttpServlet {
         UserPrefs userPrefs = UserPrefs.getPrefsForUser(user);
 
         try {
-            int tzOffset = new Integer(req.getParameter("tz_offset")).intValue();
-            userPrefs.setTzOffset(tzOffset);
-            userPrefs.save();
+//            int tzOffset = new Integer(req.getParameter("tz_offset")).intValue();
+//            userPrefs.setTzOffset(tzOffset);
+//            userPrefs.save();
         } catch (NumberFormatException nfe) {
             // User entered a value that wasn't an integer.  Ignore for now.
         }

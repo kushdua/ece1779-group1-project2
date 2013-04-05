@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-	<servlet>
+<!-- 	<servlet>
 		<servlet-name>HelloWorld</servlet-name>
 		<servlet-class>ece1779.appengine.HelloWorld</servlet-class>
 	</servlet>
@@ -55,9 +55,9 @@
    	 	<servlet-name>fileupload</servlet-name>
     	<url-pattern>/FileUpload</url-pattern>
   	</servlet-mapping>
+ -->
 
-
-  	<security-constraint>
+<!--   	<security-constraint>
     		<web-resource-collection>
       			<web-resource-name>prefs</web-resource-name>
       			<url-pattern>/prefs</url-pattern>
@@ -65,9 +65,9 @@
     		<auth-constraint>
       			<role-name>*</role-name>
     		</auth-constraint>
-  	</security-constraint>
+  	</security-constraint> -->
 	
-	<security-constraint>
+<!-- 	<security-constraint>
     		<web-resource-collection>
       			<web-resource-name>onlyadmin</web-resource-name>
       			<url-pattern>/onlyadmin</url-pattern>
@@ -75,8 +75,17 @@
     		<auth-constraint>
       			<role-name>admin</role-name>
     		</auth-constraint>
-  	</security-constraint>
+  	</security-constraint> -->
 	
+	<servlet>
+    	<servlet-name>Authenticate</servlet-name>
+    	<servlet-class>ece1779.appengine.fileupload.Authenticate</servlet-class>
+  	</servlet>
+  	<servlet-mapping>
+   	 	<servlet-name>Authenticate</servlet-name>
+    	<url-pattern>/Authenticate</url-pattern>
+  	</servlet-mapping>
+  	
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>

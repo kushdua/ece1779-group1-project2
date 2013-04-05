@@ -6,16 +6,39 @@ import javax.persistence.EntityManager;
 import javax.persistence.Id;
 import com.google.appengine.api.users.User;
 
-
 @Entity(name = "UserPrefs")
 public class UserPrefs {
+	/*
+	 username
+( user object)
+nickname
+GamesWon
+GamesDrawn
+GamesLost
+IsLoggedIn
+SuccessMsg
+ErrorMsg
+	 */
     @Id
     private String userId;
 
-    private int tzOffset;
+    @Basic
+    private String errorMessages;
+    
+    @Basic
+    private String successMessages;
     
     @Basic
     private User user;
+
+    @Basic
+    private boolean loggedIn;
+
+    @Basic
+    private int rating;
+
+    @Basic
+    private float winPercentage;
 
     public UserPrefs(String userId) {
         this.userId = userId;
@@ -23,14 +46,6 @@ public class UserPrefs {
 
     public String getUserId() {
         return userId;
-    }
-
-    public int getTzOffset() {
-        return tzOffset;
-    }
-
-    public void setTzOffset(int tzOffset) {
-        this.tzOffset = tzOffset;
     }
 
     public User getUser() {
@@ -67,4 +82,44 @@ public class UserPrefs {
             em.close();
         }
     }
+
+	public String getErrorMessages() {
+		return errorMessages;
+	}
+
+	public void setErrorMessages(String errorMessages) {
+		this.errorMessages = errorMessages;
+	}
+
+	public String getSuccessMessages() {
+		return successMessages;
+	}
+
+	public void setSuccessMessages(String successMessages) {
+		this.successMessages = successMessages;
+	}
+
+	public int getRating() {
+		return rating;
+	}
+
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
+
+	public boolean isLoggedIn() {
+		return loggedIn;
+	}
+
+	public void setLoggedIn(boolean loggedIn) {
+		this.loggedIn = loggedIn;
+	}
+
+	public float getWinPercentage() {
+		return winPercentage;
+	}
+
+	public void setWinPercentage(float winPercentage) {
+		this.winPercentage = winPercentage;
+	}
 }
