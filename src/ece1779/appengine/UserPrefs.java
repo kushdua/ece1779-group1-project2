@@ -42,6 +42,12 @@ ErrorMsg
 
     public UserPrefs(String userId) {
         this.userId = userId;
+        this.errorMessages = "";
+        this.successMessages = "";
+        this.user=null;
+        this.loggedIn=false;
+        this.rating=1500;
+        this.winPercentage=0.0f;
     }
 
     public String getUserId() {
@@ -56,7 +62,7 @@ ErrorMsg
         this.user = user;
     }
 
-    public static UserPrefs getPrefsForUser(User user) {
+    public static UserPrefs getPrefsForUser(User user, boolean loggedIn) {
         UserPrefs userPrefs = null;
 
         EntityManager em = EMF.get().createEntityManager();
@@ -65,6 +71,7 @@ ErrorMsg
             if (userPrefs == null) {
                 userPrefs = new UserPrefs(user.getUserId());
                 userPrefs.setUser(user);
+                userPrefs.setLoggedIn(loggedIn);
                 em.persist(userPrefs);
             }
         } finally {
