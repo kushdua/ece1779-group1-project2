@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <%@page import="ece1779.appengine.*"%>
+<%@page import="com.google.appengine.api.datastore.PreparedQuery"%>
+<%@page import="com.google.appengine.api.datastore.Entity"%>
 
 <html>
 <head>
@@ -32,21 +34,28 @@
 				    	<tr>
 				    		<th>Game ID</th>
 				    		<th>Opponent</th>
-				    		<th>btnAccept</th>
-				    		<th>btnReject</th>
+				    		<th></th>
+				    		<th></th>
 				    	</tr>
+<%
+PreparedQuery pq = Helper.getInvitedGames();
+		String key;
+		String gameId;
+		String email;
+		for (Entity result : pq.asIterable()) {	
+			key = result.getKey().toString();
+			gameId = key.substring(8, key.length()-1);
+			
+%>	
 				    	<tr>
-	                      <td>Game 1</td>
-	        		      <td>1</td>
-	        		      <td></td>
-	        		      <td></td>
+	                      <td><%= gameId %></td>
+	        		      <td><%= ((User)result.getProperty("user1")) %></td>
+	        		      <td><button class="btn btn-small btn-primary" name="newGameBtn" type="button" >Accept</button></td>
+	        		      <td><button class="btn btn-small btn-primary" name="newGameBtn" type="button" >Reject</button></td>
                    		</tr>
-                   		<tr>
-	                      <td>Game 2</td>
-	        		      <td>2</td>
-	        		      <td>20</td>
-	        		      <td></td>
-                   		</tr>
+                   		<%
+                   		}
+                   		%>
 				    </table>
 				</div>
 			</div>

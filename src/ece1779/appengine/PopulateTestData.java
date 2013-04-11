@@ -6,13 +6,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
+//import javax.persistence.Query;
 import javax.servlet.http.*; 
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.CompositeFilter;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
+import com.google.appengine.api.datastore.*;
 public class PopulateTestData extends HttpServlet {
 		 /**
 	 * 
@@ -24,8 +30,28 @@ public class PopulateTestData extends HttpServlet {
 	throws IOException {
 			
 			UserService userService = UserServiceFactory.getUserService();
-            User user1 = userService.getCurrentUser();
+            User currentUser = userService.getCurrentUser();
+            
+         // Get the Datastore Service
+            DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+             
+            Filter userFilter = new FilterPredicate("user2",FilterOperator.EQUAL,currentUser);
+            Filter isAccepted = new FilterPredicate("isAccepted",FilterOperator.EQUAL,false);
+            
+            Filter fltr = CompositeFilterOperator.and(userFilter ,isAccepted );
+            		  
+            
+         // Use class Query to assemble a query
+			Query q = new Query("TTTGame").setFilter(fltr);
+            //.setFilter(userFilter);
+
+            // Use PreparedQuery interface to retrieve results
+            PreparedQuery pq = datastore.prepare(q);
+            
+           // List<Entity> results = datastore.prepare(q).asList(FetchOptions.Builder.withDefaults());
 			
+            
+            
             /*
             ArrayList<TTTGame> games = new ArrayList<TTTGame>();
         	EntityManager em = EMF.get().createEntityManager();
@@ -50,10 +76,11 @@ public class PopulateTestData extends HttpServlet {
     		}
             */
             
+            /*
 			ArrayList<User> users = new ArrayList<User>();
 			EntityManager em = EMF.get().createEntityManager();
 			
-			boolean loadData = true;
+			boolean loadData = false;
 			
 						
 			if (loadData){
@@ -89,7 +116,7 @@ public class PopulateTestData extends HttpServlet {
 			}
 			
 			}
-			
+			*/
 			
 			/*
 			//ArrayList<TTTGame> games = new ArrayList<TTTGame>();
@@ -148,6 +175,9 @@ public class PopulateTestData extends HttpServlet {
 	
 	resp.setContentType("text/html");
 	PrintWriter out = resp.getWriter();
+	for (Entity result : pq.asIterable()) {
+		out.println("<p>"+ ((User)result.getProperty("user1")).getEmail() +"</p>");
+	}
 	out.println("<p>The test data have been loaded</p>");
 }
 		
