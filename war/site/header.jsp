@@ -26,14 +26,14 @@
             		"<li><a href='welcome.jsp'>Home</a></li>" %>
         <% if(request!=null && request.getRequestURI()!=null) { %>
             <%= (request.getRequestURI().contains("stats.jsp"))?
-                    "<li><a href='upload.jsp' class='active'>Statistics</a></li>" : 
-                    "<li><a href='upload.jsp'>Upload</a></li>" %>
+                    "<li><a href='stats.jsp' class='active'>Statistics</a></li>" : 
+                    "<li><a href='stats.jsp'>Statistics</a></li>" %>
             <%= (request.getRequestURI().contains("play.jsp"))?
-                    "<li><a href='manager.jsp' class='active'>Play game</a></li>" : 
-                    "<li><a href='manager.jsp'>Manager UI</a></li>" %>
+                    "<li><a href='play.jsp' class='active'>Play Game</a></li>" : 
+                    "<li><a href='play.jsp'>Play Game</a></li>" %>
             <%= (request.getRequestURI().contains("view_games.jsp"))?
-                    "<li><a href='view.jsp' class='active'>View Games</a></li>" : 
-                    "<li><a href='view.jsp'>View Gallery</a></li>" %>
+                    "<li><a href='view_games.jsp' class='active'>View Games</a></li>" : 
+                    "<li><a href='view_games.jsp'>View Games</a></li>" %>
             <% if(user!=null && userService!=null)
             { %>
             	<li><a href="<%= userService.createLogoutURL("/") %>">Logout</a></li>
