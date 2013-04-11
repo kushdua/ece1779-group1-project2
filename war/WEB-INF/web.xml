@@ -93,6 +93,14 @@
    	 	<servlet-name>PopulateTestData</servlet-name>
     	<url-pattern>/populatetestdata</url-pattern>
   	</servlet-mapping>
+  	<servlet>
+    	<servlet-name>PlayGame</servlet-name>
+    	<servlet-class>ece1779.appengine.PlayGame</servlet-class>
+  	</servlet>
+  	<servlet-mapping>
+   	 	<servlet-name>PlayGame</servlet-name>
+    	<url-pattern>/playgame</url-pattern>
+  	</servlet-mapping>
   	
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

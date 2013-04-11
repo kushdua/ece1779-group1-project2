@@ -60,12 +60,21 @@ PreparedQuery pq = Helper.getInvitedGames();
 				    	  <td><%= gameId %></td>
 	        		      <td><%= opponent %></td>
 	        		      <td>
-	        		      	<form>
-	        		      		<input type="hidden" value=<%= gameId %>  >
-	        		      		<button class="btn btn-small btn-primary" name="newGameBtn" type="button" >Accept</button>
+	        		      	<form action="/playgame" method="post">
+	        		      		<input type="hidden" name="gameId" value=<%= gameId %>  >
+	        		      		<input type="hidden" name="opponent" value=<%= opponent %>  >
+	        		      		<input type="hidden" name="userAction" value="accept" >
+	        		      		<button class="btn btn-small btn-primary" name="acceptBtn" type="submit" >Accept</button>
 	        		      	</form>
 	        		      </td>
-	        		      <td><button class="btn btn-small btn-primary" name="newGameBtn" type="button" >Reject</button></td>
+	        		      <td>
+	        		      	<form action="/playgame" method="post">
+	        		      		<input type="hidden" name="gameId" value=<%= gameId %>  >
+	        		      		<input type="hidden" name="opponent" value=<%= opponent %>  >
+	        		      		<input type="hidden" name="userAction" value="reject" >
+	        		      		<button class="btn btn-small btn-primary" name="rejectBtn" type="submit" >Reject</button>
+	        		      	</form>
+	        		      </td>
                    		</tr>
                    		
                    		<%
