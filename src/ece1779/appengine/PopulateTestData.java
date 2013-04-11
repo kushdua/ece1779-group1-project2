@@ -181,6 +181,12 @@ public class PopulateTestData extends HttpServlet {
 	out.println("<p>The test data have been loaded</p>");
 }
 		
+		public void doPost(HttpServletRequest req,
+	             HttpServletResponse resp)
+	throws IOException {
+			doGet(req,resp);
+		}
+		
 	
 
 }

@@ -20,6 +20,13 @@
 
 <%@ include file="header.jsp" %>
 
+<script type="text/javascript">
+	function startNewGame()
+	{
+		window.location="/site/dummyPlay.jsp";
+	}
+</script>
+
 <!-- if parameter not specified to page, all uploaded images displayed; else only transformations for specified image are displayed by server side script which writes out page -->
 <div class="container">
 		<div class="accordion-group">
@@ -45,14 +52,22 @@ PreparedQuery pq = Helper.getInvitedGames();
 		for (Entity result : pq.asIterable()) {	
 			key = result.getKey().toString();
 			gameId = key.substring(8, key.length()-1);
+			User opponent = ((User)result.getProperty("user1"));
 			
 %>	
+						
 				    	<tr>
-	                      <td><%= gameId %></td>
-	        		      <td><%= ((User)result.getProperty("user1")) %></td>
-	        		      <td><button class="btn btn-small btn-primary" name="newGameBtn" type="button" >Accept</button></td>
+				    	  <td><%= gameId %></td>
+	        		      <td><%= opponent %></td>
+	        		      <td>
+	        		      	<form>
+	        		      		<input type="hidden" value=<%= gameId %>  >
+	        		      		<button class="btn btn-small btn-primary" name="newGameBtn" type="button" >Accept</button>
+	        		      	</form>
+	        		      </td>
 	        		      <td><button class="btn btn-small btn-primary" name="newGameBtn" type="button" >Reject</button></td>
                    		</tr>
+                   		
                    		<%
                    		}
                    		%>
@@ -89,9 +104,9 @@ PreparedQuery pq = Helper.getInvitedGames();
 				  </table>
 			</div>
 		</div>
-		<form class="form-welcome" >
-			<button class="btn btn-small btn-primary" name="newGameBtn" type="submit">Start New Game</button>
-		</form>
+		
+			<button class="btn btn-small btn-primary" name="newGameBtn"  onclick="startNewGame()">Start New Game</button>
+		
 	</div>
 </div> <!-- /container -->
 

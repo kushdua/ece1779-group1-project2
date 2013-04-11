@@ -50,5 +50,36 @@ public class Helper {
         return pq;
         
     }
+	
+	public static PreparedQuery getPreviousGames()
+    {
+
+		UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+        
+     // Get the Datastore Service
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        
+        Filter user1Filter = new FilterPredicate("user1",FilterOperator.EQUAL,currentUser);
+        Filter user2Filter = new FilterPredicate("user2",FilterOperator.EQUAL,currentUser);
+        
+        Filter userFilter = CompositeFilterOperator.or(user1Filter, user2Filter);
+                
+        Filter isAccepted = new FilterPredicate("isAccepted",FilterOperator.EQUAL,true);
+        Filter winner = new FilterPredicate("winner",FilterOperator.GREATER_THAN,0);
+        
+        Filter fltr = CompositeFilterOperator.and(userFilter ,isAccepted, winner );
+        		  
+        
+     // Use class Query to assemble a query
+		Query q = new Query("TTTGame").setFilter(fltr);
+        //.setFilter(userFilter);
+
+        // Use PreparedQuery interface to retrieve results
+        PreparedQuery pq = datastore.prepare(q);
+        
+        return pq;
+        
+    }
 
 }

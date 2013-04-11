@@ -16,7 +16,7 @@
 
 <%@ include file="header.jsp" %>
 
-<script>
+<script type="text/javascript">
 	<%
 		//Grab contents of specified game.
 		int gameId = Integer.parseInt(request.getParameter("gameID"));
