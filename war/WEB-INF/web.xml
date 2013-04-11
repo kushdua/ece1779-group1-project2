@@ -85,6 +85,14 @@
    	 	<servlet-name>Authenticate</servlet-name>
     	<url-pattern>/Authenticate</url-pattern>
   	</servlet-mapping>
+  	<servlet>
+    	<servlet-name>PopulateTestData</servlet-name>
+    	<servlet-class>ece1779.appengine.PopulateTestData</servlet-class>
+  	</servlet>
+  	<servlet-mapping>
+   	 	<servlet-name>PopulateTestData</servlet-name>
+    	<url-pattern>/populatetestdata</url-pattern>
+  	</servlet-mapping>
   	
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

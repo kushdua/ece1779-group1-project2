@@ -23,25 +23,66 @@
 		<div class="accordion-group">
 			<div class="accordion-heading">
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseManualSet">
-					Game 1
+					Available Games
 				</a>
 			</div>
 			 <div id="collapseManualSet" class="accordion-body collapse">
 				<div class="accordion-inner">
-					Game 1 contents
+					<table class="table table-striped">
+				    	<tr>
+				    		<th>Game ID</th>
+				    		<th>Opponent</th>
+				    		<th>btnAccept</th>
+				    		<th>btnReject</th>
+				    	</tr>
+				    	<tr>
+	                      <td>Game 1</td>
+	        		      <td>1</td>
+	        		      <td></td>
+	        		      <td></td>
+                   		</tr>
+                   		<tr>
+	                      <td>Game 2</td>
+	        		      <td>2</td>
+	        		      <td>20</td>
+	        		      <td></td>
+                   		</tr>
+				    </table>
 				</div>
 			</div>
 		</div>
 		<div class="accordion-group">
 			<div class="accordion-heading">
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseAutoScale">
-					Game 2
+					Past Games
 				</a>
 			</div>
 			 <div id="collapseAutoScale" class="accordion-body collapse">
-				Game 2 contents
+				<table class="table table-striped">
+				    	<tr>
+				    		<th>Game ID</th>
+				    		<th>Opponent</th>
+				    		<th>Winner</th>
+				    		<th>btnRematch</th>
+				    	</tr>
+				    	<tr>
+	                      <td>Game 1</td>
+	        		      <td>1</td>
+	        		      <td></td>
+	        		      <td></td>
+                   		</tr>
+                   		<tr>
+	                      <td>Game 2</td>
+	        		      <td>2</td>
+	        		      <td>20</td>
+	        		      <td></td>
+                   		</tr>
+				  </table>
 			</div>
 		</div>
+		<form class="form-welcome" >
+			<button class="btn btn-small btn-primary" name="newGameBtn" type="submit">Start New Game</button>
+		</form>
 	</div>
 </div> <!-- /container -->
 
