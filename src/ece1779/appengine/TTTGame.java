@@ -143,4 +143,15 @@ public class TTTGame {
 	public void setContentsOfBoard(String contentsOfBoard) {
 		this.contentsOfBoard = contentsOfBoard;
 	}
+
+	public void setWinner(User user) {
+		if(user.compareTo(user1)==0)
+		{
+			winner=1;
+		}
+		else
+		{
+			winner=2;
+		}
+	}
 }

@@ -224,7 +224,7 @@ public class PopulateTestData extends HttpServlet {
 	            	//to simulate that all other users have invited the current user to a game
 	            	TTTGame game = new TTTGame(user2,user1);
 	            	game.setAccepted(true);
-	            	game.setWinner(3);
+	            	game.setWinner(((int)Math.random()*50 > 25)?user2:user1);
 	            	game.save();
 	            }
 	            

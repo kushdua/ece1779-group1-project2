@@ -46,7 +46,7 @@ ErrorMsg
         this.successMessages = "";
         this.user=null;
         this.loggedIn=false;
-        this.rating=1500;
+        this.rating=100;
         this.winPercentage=0.0f;
     }
 
