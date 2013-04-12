@@ -2,6 +2,7 @@
 <%@page import="ece1779.appengine.*"%>
 <%@page import="com.google.appengine.api.datastore.PreparedQuery"%>
 <%@page import="com.google.appengine.api.datastore.Entity"%>
+<%@page import="java.util.ArrayList"%>
 
 <html>
 <head>
@@ -96,20 +97,65 @@ PreparedQuery pq = Helper.getInvitedGames();
 				    		<th>Game ID</th>
 				    		<th>Opponent</th>
 				    		<th>Winner</th>
-				    		<th>btnRematch</th>
+				    		<th></th>
 				    	</tr>
+<%
+ArrayList<Entity> gamelist = Helper.getPreviousGames();
+int totalGames = gamelist.size();
+Entity en;
+String key1;
+String gameId1;
+String email1;
+
+UserService usrService = UserServiceFactory.getUserService();
+User currentUser = usrService.getCurrentUser();
+User user1;
+User user2;
+User opponent1;
+long winner;
+String winnerId = "";
+
+for(int i=0;i<totalGames;i++){
+	en = gamelist.get(i);
+	
+	key1 = en.getKey().toString();
+	gameId1 = key1.substring(8, key1.length()-1);
+	user1 = ((User)en.getProperty("user1"));
+	user2 = ((User)en.getProperty("user2"));
+	winner = (Long)en.getProperty("winner");
+	
+	if (currentUser.equals(user1)){
+		opponent1 = user2;
+	}else{
+		opponent1 = user1;
+	}
+	
+	if (winner == 1){
+		winnerId = user1.getEmail();
+	}else if (winner == 2){
+		winnerId = user2.getEmail();
+	}else if (winner == 3){
+		winnerId = "(Draw)";
+	}
+			
+%>	
 				    	<tr>
-	                      <td>Game 1</td>
-	        		      <td>1</td>
-	        		      <td></td>
-	        		      <td></td>
+	                      <td><%= gameId1 %></td>
+	        		      <td><%= opponent1 %></td>
+	        		      <td><%= winnerId %></td>
+	        		      <td>
+	        		      	<form action="/playgame" method="post">
+	        		      		<input type="hidden" name="gameId" value="0"  >
+	        		      		<input type="hidden" name="opponent" value=<%= opponent1 %>  >
+	        		      		<input type="hidden" name="userAction" value="rematch" >
+	        		      		<button class="btn btn-small btn-primary" name="rematchBtn" type="submit" >Rematch</button>
+	        		      	</form>
+	        		      </td>
                    		</tr>
-                   		<tr>
-	                      <td>Game 2</td>
-	        		      <td>2</td>
-	        		      <td>20</td>
-	        		      <td></td>
-                   		</tr>
+                   		
+                   		<%
+                   		}
+                   		%>
 				  </table>
 			</div>
 		</div>

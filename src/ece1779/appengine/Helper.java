@@ -3,6 +3,9 @@ package ece1779.appengine;
 //import javax.persistence.EntityManager;
 //import javax.persistence.Query;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -10,6 +13,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.FilterOperator;
@@ -18,6 +22,7 @@ import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Query.SortDirection;
 
 
 
@@ -51,7 +56,7 @@ public class Helper {
         
     }
 	
-	public static PreparedQuery getPreviousGames()
+	public static ArrayList<Entity> getPreviousGames()
     {
 
 		UserService userService = UserServiceFactory.getUserService();
@@ -72,13 +77,17 @@ public class Helper {
         		  
         
      // Use class Query to assemble a query
-		Query q = new Query("TTTGame").setFilter(fltr);
+		Query q = new Query("TTTGame").setFilter(fltr).addSort("winner", SortDirection.ASCENDING).addSort(com.google.appengine.api.datastore.Entity.KEY_RESERVED_PROPERTY, SortDirection.DESCENDING);
         //.setFilter(userFilter);
 
         // Use PreparedQuery interface to retrieve results
         PreparedQuery pq = datastore.prepare(q);
         
-        return pq;
+        List<Entity> games =  pq.asList(FetchOptions.Builder.withLimit(10));
+        ArrayList<Entity> gamelist = new ArrayList<Entity>();
+        gamelist.addAll(games);
+                
+        return gamelist;
         
     }
 

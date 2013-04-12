@@ -35,6 +35,8 @@ public class PlayGame extends HttpServlet  {
 				resp.sendRedirect("/site/dummyPlay.jsp");
 			}else if (userAction.equals("reject")){
 		       	resp.sendRedirect("/site/view_games.jsp");
+			}else if (userAction.equals("rematch")){
+		       	resp.sendRedirect("/site/dummyPlay.jsp");
 			}
 			
 			} catch (Exception e) {
