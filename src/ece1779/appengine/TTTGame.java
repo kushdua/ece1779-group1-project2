@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.Id;
 import javax.persistence.Query;
+import javax.persistence.Transient;
 
 import com.google.appengine.api.users.User;
 
@@ -43,10 +44,14 @@ public class TTTGame {
     //Who was the winner - int with values 1 or 2 for user 1 or 2 respectively
     @Basic
     private int winner;
+    
+    @Transient
+    private String emptyBoard = " , , , , , , , , ";
 
     public TTTGame(User user1, User user2) {
     	this.user1=user1;
     	this.user2=user2;
+    	this.contentsOfBoard=emptyBoard;
     	this.setActive(false);
     	this.setAccepted(false);
     }
@@ -56,6 +61,7 @@ public class TTTGame {
     	this.user1=null;
     	this.user2=null;
     	this.gameId = gameId;
+    	this.contentsOfBoard=emptyBoard;
     	this.setActive(false);
     	this.setAccepted(false);
     }

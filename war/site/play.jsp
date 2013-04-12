@@ -7,19 +7,69 @@
 <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 </head>
-<body>
+<body onload="setupBoard()">
 
 <%@ include file="header.jsp" %>
+
+<!-- if parameter not specified to page, all uploaded images displayed; else only transformations for specified image are displayed by server side script which writes out page -->
+<div class="container">
+	<div class="alert alert-success hidden" id="successContainer">
+		<a class="close" data-dismiss="alert">×</a>
+		<p id="successMessage" />
+	</div>
+	<div class="alert alert-error hidden" id="errorContainer">
+		<a class="close" data-dismiss="alert">×</a>
+		<p class= id="error"/>
+	</div>
+    <ul class="thumbnails">
+		<li>
+			<a href="#"><img class="span3" id="row0Col0" width="100px" height="100px" onClick="cellClickedHandler(0,0)" /></a>
+		</li>
+		<li>
+			<a href="#"><img class="span3" id="row0Col1" width="100px" height="100px" onClick="cellClickedHandler(0,1)" /></a>
+		</li>
+		<li>
+			<a href="#"><img class="span3" id="row0Col2" width="100px" height="100px" onClick="cellClickedHandler(0,2)" /></a>
+		</li>
+		<li>
+			<a href="#"><img class="span3" id="row1Col0" width="100px" height="100px" onClick="cellClickedHandler(1,0)" /></a>
+		</li>
+		<li>
+			<a href="#"><img class="span3" id="row1Col1" width="100px" height="100px" onClick="cellClickedHandler(1,1)" /></a>
+		</li>
+		<li>
+			<a href="#"><img class="span3" id="row1Col2" width="100px" height="100px" onClick="cellClickedHandler(1,2)" /></a>
+		</li>
+		<li>
+			<a href="#"><img class="span3" id="row2Col0" width="100px" height="100px" onClick="cellClickedHandler(2,0)" /></a>
+		</li>
+		<li>
+			<a href="#"><img class="span3" id="row2Col1" width="100px" height="100px" onClick="cellClickedHandler(2,1)" /></a>
+		</li>
+		<li>
+			<a href="#"><img class="span3" id="row2Col2" width="100px" height="100px" onClick="cellClickedHandler(2,2)" /></a>
+		</li>
+    </ul>
+</div> <!-- /container -->
 
 <script type="text/javascript">
 	<%
 		//Grab contents of specified game.
-		int gameId = Integer.parseInt(request.getParameter("gameID"));
+		int gameId = -1;
+		try
+		{
+			gameId = Integer.parseInt(request.getParameter("gameID"));
+		}
+		catch(NumberFormatException e)
+		{
+		}
 		//TODO AJAX request for game contents (separated by ,) and
 		//turn (concatenated to game contents by ;)
 		String gameBoardContents = "x, , , ,x,o, ,o,x;1,o";
@@ -27,45 +77,48 @@
 	var gameBoardContents = "<%= gameBoardContents %>";
 	var split1 = gameBoardContents.split(";");
 	var gameBoard = split1[0].split(",");
-	var myTurn = (split[1]==="1") ? true : false;
-	var myPiece = split[2];
+	var myTurn = true;//(split1[1]==="1") ? true : false;
+	var myPiece = split1[2];
 	
-	var imageO = "<image src=\"assets/o.png\" />";
-	var imageX = "<image src=\"assets/x.png\" />";
-	var imageEmpty = "<image src=\"assets/empty.png\" />";
+	var imageO = "assets/o.png";
+	var imageX = "assets/x.png";
+	var imageEmpty = "assets/empty.png";
 	
-	for(var i=0; i<gameBoard.length; i++)
+	function setupBoard()
 	{
-		if(gameBoard[i]=="o")
+		for(var i=0; i<gameBoard.length; i++)
 		{
-			$("#row"+i/3+"Col"+i%3).src = imageX;
-		}
-		else if(gameBoard[i]=="x")
-		{
-			$("#row"+i/3+"Col"+i%3).src = imageO;
-		}
-		else if(gameBoard[i]==" ")
-		{
-			$("#row"+i/3+"Col"+i%3).src = imageEmpty;
+			if(gameBoard[i]=="o")
+			{
+				$("#row"+Math.floor(i/3)+"Col"+i%3).attr('src',imageX);
+			}
+			else if(gameBoard[i]=="x")
+			{
+				$("#row"+Math.floor(i/3)+"Col"+i%3).attr('src',imageO);
+			}
+			else if(gameBoard[i]==" ")
+			{
+				$("#row"+Math.floor(i/3)+"Col"+i%3).attr('src',imageEmpty);
+			}
 		}
 	}
 	
 	function cellClickedHandler(row, col)
 	{
-		if(myTurn===true && gameBoard[row*3+col]==="")
+		if(myTurn===true && gameBoard[row*3+col]===" ")
 		{
 			//Can add game piece
 			if(myPiece ==="o")
 			{
 				gameBoard[row*3+col]="o";
 				//TODO send to JSP on server
-				$("#row"+row+"Col"+col).src=imageO;
+				$("#row"+row+"Col"+col).attr('src',imageO);
 			}
 			else if(myPiece == "x")
 			{
 				gameBoard[row*3+col]="x";
 				//TODO send to JSP on server
-				$("#row"+row+"Col"+col).src=imageX;
+				$("#row"+row+"Col"+col).attr('src',imageX);
 			}
 			$("#successMessage").text($("#successMessage").text()+"Successfully played move.\n");
 			checkGameEnd();
@@ -93,7 +146,7 @@
 		var col=-1;
 		for(var i=minBound; i<maxBound; i++)
 		{
-			row=i/3;
+			row=Math.floor(i/3);
 			col=i%3;
 			currPiece=gameBoard[row*3+col];
 			
@@ -125,31 +178,6 @@
 	}
 </script>
 
-<!-- if parameter not specified to page, all uploaded images displayed; else only transformations for specified image are displayed by server side script which writes out page -->
-<div class="container">
-	<div class="alert alert-success hidden" id="successContainer">
-		<a class="close" data-dismiss="alert">×</a>
-		<p id="successMessage" />
-	</div>
-	<div class="alert alert-error hidden" id="errorContainer">
-		<a class="close" data-dismiss="alert">×</a>
-		<p class= id="error"/>
-	</div>
-    <ul class="thumbnails">
-		<li class="span4" id="row1Col1" onClick="cellClickedHandler(0,0)"></li>
-		<li class="span4" id="row1Col2" onClick="cellClickedHandler(0,1)"></li>
-		<li class="span4" id="row1Col3" onClick="cellClickedHandler(0,2)"></li>
-		<li class="span4" id="row2Col1" onClick="cellClickedHandler(1,0)"></li>
-		<li class="span4" id="row2Col2" onClick="cellClickedHandler(1,1)"></li>
-		<li class="span4" id="row2Col3" onClick="cellClickedHandler(1,2)"></li>
-		<li class="span4" id="row3Col1" onClick="cellClickedHandler(2,0)"></li>
-		<li class="span4" id="row3Col2" onClick="cellClickedHandler(2,1)"></li>
-		<li class="span4" id="row3Col3" onClick="cellClickedHandler(2,2)"></li>
-    </ul>
-</div> <!-- /container -->
-
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
 
