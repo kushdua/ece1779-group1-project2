@@ -28,33 +28,33 @@
 		<a class="close" data-dismiss="alert">×</a>
 		<p class= id="error"/>
 	</div>
-    <ul class="thumbnails">
+    <ul class="thumbnails" height="300px" width="300px">
 		<li>
-			<a href="#"><img class="span3" id="row0Col0" width="100px" height="100px" onClick="cellClickedHandler(0,0)" /></a>
+			<a href="#"><img class="span3" id="row0Col0" onClick="cellClickedHandler(0,0)" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row0Col1" width="100px" height="100px" onClick="cellClickedHandler(0,1)" /></a>
+			<a href="#"><img class="span3" id="row0Col1" onClick="cellClickedHandler(0,1)" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row0Col2" width="100px" height="100px" onClick="cellClickedHandler(0,2)" /></a>
+			<a href="#"><img class="span3" id="row0Col2" onClick="cellClickedHandler(0,2)" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row1Col0" width="100px" height="100px" onClick="cellClickedHandler(1,0)" /></a>
+			<a href="#"><img class="span3" id="row1Col0" onClick="cellClickedHandler(1,0)" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row1Col1" width="100px" height="100px" onClick="cellClickedHandler(1,1)" /></a>
+			<a href="#"><img class="span3" id="row1Col1" onClick="cellClickedHandler(1,1)" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row1Col2" width="100px" height="100px" onClick="cellClickedHandler(1,2)" /></a>
+			<a href="#"><img class="span3" id="row1Col2" onClick="cellClickedHandler(1,2)" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row2Col0" width="100px" height="100px" onClick="cellClickedHandler(2,0)" /></a>
+			<a href="#"><img class="span3" id="row2Col0" onClick="cellClickedHandler(2,0)" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row2Col1" width="100px" height="100px" onClick="cellClickedHandler(2,1)" /></a>
+			<a href="#"><img class="span3" id="row2Col1" onClick="cellClickedHandler(2,1)" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row2Col2" width="100px" height="100px" onClick="cellClickedHandler(2,2)" /></a>
+			<a href="#"><img class="span3" id="row2Col2" onClick="cellClickedHandler(2,2)" /></a>
 		</li>
     </ul>
 </div> <!-- /container -->
@@ -72,7 +72,7 @@
 		}
 		//TODO AJAX request for game contents (separated by ,) and
 		//turn (concatenated to game contents by ;)
-		String gameBoardContents = "x, , , ,x,o, ,o,x;1,o";
+		String gameBoardContents = "o, , , ,x,o, ,o,x;1;x";
 	%>
 	var gameBoardContents = "<%= gameBoardContents %>";
 	var split1 = gameBoardContents.split(";");
@@ -90,11 +90,11 @@
 		{
 			if(gameBoard[i]=="o")
 			{
-				$("#row"+Math.floor(i/3)+"Col"+i%3).attr('src',imageX);
+				$("#row"+Math.floor(i/3)+"Col"+i%3).attr('src',imageO);
 			}
 			else if(gameBoard[i]=="x")
 			{
-				$("#row"+Math.floor(i/3)+"Col"+i%3).attr('src',imageO);
+				$("#row"+Math.floor(i/3)+"Col"+i%3).attr('src',imageX);
 			}
 			else if(gameBoard[i]==" ")
 			{
