@@ -24,7 +24,7 @@
 <script type="text/javascript">
 	function startNewGame()
 	{
-		window.location="/site/dummyPlay.jsp";
+		window.location="/site/selectplayer.jsp";
 	}
 </script>
 

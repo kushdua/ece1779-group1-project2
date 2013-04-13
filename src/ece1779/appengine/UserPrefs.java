@@ -1,9 +1,14 @@
 package ece1779.appengine;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.Id;
+import javax.persistence.Query;
+
 import com.google.appengine.api.users.User;
 
 @Entity(name = "UserPrefs")
@@ -114,6 +119,28 @@ ErrorMsg
         }
 
         return userPrefs;
+    }
+    
+    public static ArrayList<String> getUsers(User exceptUser)
+    {
+    	EntityManager em = EMF.get().createEntityManager();
+        ArrayList<String>resultsList = new ArrayList<String>();
+    	try
+		{
+	        Query query = em.createQuery("SELECT * from UserPrefs");// WHERE i.user1 != :user1 AND i.user2 != :user2");
+//	        query.setParameter("user1", exceptUser);
+//	        query.setParameter("user2", exceptUser);
+	        List<UserPrefs> users = (List<UserPrefs>) query.getResultList();
+	        for(UserPrefs u : users)
+	        {
+	        	if(u.getUser().compareTo(exceptUser)!=0) resultsList.add(u.userId+","+u.getUser().getEmail());
+	        }
+		}
+    	finally
+		{
+			em.close();
+		}
+        return resultsList;
     }
 
     public void save() {
