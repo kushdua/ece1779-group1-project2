@@ -32,8 +32,10 @@ public class PlayGame extends HttpServlet  {
 			resp.setContentType("text/html");
        	//response.sendRedirect(request.getRequestURI());
 			if (userAction.equals("accept")){
-				resp.sendRedirect("/site/dummyPlay.jsp");
+				acceptGame(gameId);
+				resp.sendRedirect("/site/play.jsp");
 			}else if (userAction.equals("reject")){
+				rejectGame(gameId);
 		       	resp.sendRedirect("/site/view_games.jsp");
 			}else if (userAction.equals("rematch")){
 		       	resp.sendRedirect("/site/dummyPlay.jsp");
@@ -44,6 +46,26 @@ public class PlayGame extends HttpServlet  {
 			} 
 		
 	}
+	
+	private void rejectGame(int gameId)
+	{
+		TTTGame game = TTTGame.getGame(gameId);
+		
+		game.setRejected(true);
+		game.save();
+	}
+	
+	private void acceptGame(int gameId)
+	{
+		TTTGame game = TTTGame.getGame(gameId);
+		
+		game.setAccepted(true);
+		game.setActive(true);
+		game.save();
+	}
+	
+	
+	
 	
 }
 
