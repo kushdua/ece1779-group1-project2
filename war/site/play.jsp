@@ -77,8 +77,10 @@
 	var gameBoardContents = "<%= gameBoardContents %>";
 	var split1 = gameBoardContents.split(";");
 	var gameBoard = split1[0].split(",");
-	var myTurn = true;//(split1[1]==="1") ? true : false;
+	var myTurn = (split1[1]=="1") ? true : false;
 	var myPiece = split1[2];
+	var gameID = <%= gameId %>;
+	var gameDone = false;
 	
 	var imageO = "assets/o.png";
 	var imageX = "assets/x.png";
@@ -101,17 +103,55 @@
 				$("#row"+Math.floor(i/3)+"Col"+i%3).attr('src',imageEmpty);
 			}
 		}
+		setTimeout(function(){
+			if(!gameDone)
+			{
+	            gameBoardContents = getGameBoardContents();
+	            split1 = gameBoardContents.split(";");
+	            gameBoard = split1[0].split(",");
+	            myTurn = (split1[1]=="1") ? true : false;
+	            myPiece = split1[2];
+			}
+		}, 5000);
 	}
 	
-	function getGameBoardContents()
+	function sendGameBoardContents()
 	{
-		return $.ajax({
+		/* $.ajax({
 		    type: "GET",
-		    url: "GameContents?,
+		    url: "GameContents?gameID="+gameID+"&gameBoardContents="+getGameBoardString()+"&gameDone="+gameDone,
 		    async: false,
-        }).responseText;
+        }); */
+		$.post("GameContents", { gameID: gameID, gameBoardContents: getGameBoardString(), gameDone: gameDone } );
 	}
+    
+    function getGameBoardContents()
+    {
+        /* return $.ajax({
+            type: "GET",
+            url: "GameContents?gameID="+gameID,
+            async: false,
+        }).responseText; */
+        var returnedData = "";
+        $.post("GameContents", { gameID: gameID } ).done(function(data){returnedData = data;});
+        return returnedData;
+    }
 	
+	function getGameBoardString()
+	{
+	    var answer="";
+	    for(var i=0; i<gameBoard.length; i++)
+    	{
+	    	answer+=gameBoard[i];
+	        if(i<gameBoard.length-1)
+	        {
+	        	answer+=",";
+	        }
+    	}
+	    answer+=(myTurn?";1":";2");
+	    answer+=myPiece;
+	    return answer;
+	}
 	
 	function cellClickedHandler(row, col)
 	{
@@ -121,21 +161,15 @@
 			if(myPiece ==="o")
 			{
 				gameBoard[row*3+col]="o";
-				//TODO send to JSP on server
-				$.ajax({
-					url: "http://fiddle.jshell.net/favicon.png",
-					beforeSend: function ( xhr ) {
-						   xhr.overrideMimeType("text/plain; charset=x-user-defined");
-					}
-				}).done(function ( data ) {
-					
-				});
+				//send to JSP on server
+				sendGameBoardContents();
 				$("#row"+row+"Col"+col).attr('src',imageO);
 			}
 			else if(myPiece == "x")
 			{
 				gameBoard[row*3+col]="x";
-				//TODO send to JSP on server
+				//send to JSP on server
+                sendGameBoardContents();
 				$("#row"+row+"Col"+col).attr('src',imageX);
 			}
 			$("#successMessage").text($("#successMessage").text()+"Successfully played move.\n");
@@ -172,24 +206,32 @@
 			if(gameBoard[row*3]==currPiece && gameBoard[row*3+1]==currPiece && gameBoard[row*3+2]==currPiece)
 			{
 				$("#successMessage").text($("#successMessage").text()+"Player " + currPiece + " wins.\n");
+				gameDone=true;
+				sendGameBoardContents();
 				setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
 			}
 			//Check that column
 			else if(gameBoard[col]==currPiece && gameBoard[col+3]==currPiece && gameBoard[col+6]==currPiece)
 			{
 				$("#successMessage").text($("#successMessage").text()+"Player " + currPiece + " wins.\n");
+                gameDone=true;
+                sendGameBoardContents();
 				setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
 			}
 			//Check diagonal up+right /
 			else if(gameBoard[6]==currPiece && gameBoard[3+1]==currPiece && gameBoard[0+2]==currPiece)
 			{
 				$("#successMessage").text($("#successMessage").text()+"Player " + currPiece + " wins.\n");
+                gameDone=true;
+                sendGameBoardContents();
 				setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
 			}
 			//Check diagonal up+left  \
 			else if(gameBoard[6+2]==currPiece && gameBoard[3+1]==currPiece && gameBoard[0]==currPiece)
 			{
 				$("#successMessage").text($("#successMessage").text()+"Player " + currPiece + " wins.\n");
+                gameDone=true;
+                sendGameBoardContents();
 				setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
 			}
 		}
