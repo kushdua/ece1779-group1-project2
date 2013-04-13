@@ -36,9 +36,16 @@ ErrorMsg
 
     @Basic
     private int rating;
-
+    
     @Basic
-    private float winPercentage;
+    private int GamesWon;
+    
+    @Basic
+    private int GamesDrawn;
+    
+    @Basic
+    private int GamesLost;
+      
 
     public UserPrefs(String userId) {
         this.userId = userId;
@@ -47,8 +54,11 @@ ErrorMsg
         this.user=null;
         this.loggedIn=false;
         this.rating=100;
-        this.winPercentage=0.0f;
+        this.GamesWon = 0;
+        this.GamesDrawn = 0;
+        this.GamesLost = 0;
     }
+    
 
     public String getUserId() {
         return userId;
@@ -61,7 +71,32 @@ ErrorMsg
     public void setUser(User user) {
         this.user = user;
     }
+    
+    public int getGamesWon(){
+    	return this.GamesWon;
+    }
 
+    public int getGamesLost(){
+    	return this.GamesLost;
+    }
+    
+    public int getGamesDrawn(){
+    	return this.GamesDrawn;
+    }
+    
+    public void incrementGamesWon(){
+    	this.GamesWon += 1;
+    }
+    
+    public void incrementGamesLost(){
+    	this.GamesLost += 1;
+    }
+    
+    public void incrementGamesDrawn(){
+    	this.GamesDrawn += 1;
+    }
+        
+    
     public static UserPrefs getPrefsForUser(User user, boolean loggedIn) {
         UserPrefs userPrefs = null;
 
@@ -121,12 +156,5 @@ ErrorMsg
 	public void setLoggedIn(boolean loggedIn) {
 		this.loggedIn = loggedIn;
 	}
-
-	public float getWinPercentage() {
-		return winPercentage;
-	}
-
-	public void setWinPercentage(float winPercentage) {
-		this.winPercentage = winPercentage;
-	}
+	
 }
