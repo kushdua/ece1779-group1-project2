@@ -29,7 +29,9 @@ public class PopulateTestData extends HttpServlet {
 	             HttpServletResponse resp)
 	throws IOException {
 			
-			//populateInvitedGames();
+			populateInvitedGames();
+			populateInvitedGamesWithOutcome();
+			
 			
 			/*
 			UserService userService = UserServiceFactory.getUserService();
@@ -198,7 +200,55 @@ public class PopulateTestData extends HttpServlet {
 			ArrayList<User> users = new ArrayList<User>();
 			EntityManager em = EMF.get().createEntityManager();
 			
-			boolean loadData = false;
+			boolean loadData = true;
+			
+						
+			if (loadData){
+			try
+			{
+				javax.persistence.Query query = null;
+	            List<User> results = null;
+
+	            // Query for all entities of a kind
+	            query = em.createQuery("SELECT user from UserPrefs u");
+	            results = (List<User>) query.getResultList();
+	            
+	            //results.
+	            users.addAll(results);
+	            
+	            
+	            User user2;
+	            users.remove(user1);
+	            
+	            int numOfUsers = users.size();
+	            for (int i=0; i<numOfUsers; i++){
+	            	user2 =users.get(i);
+	            	//to simulate that all other users have invited the current user to a game
+	            	TTTGame game = new TTTGame(user2,user1);
+	            	//game.setAccepted(true);
+	            	//game.setWinner(((int)Math.random()*50 > 25)?user2:user1);
+	            	game.save();
+	            }
+	            
+	            
+			}
+			finally
+			{
+				em.close();
+			}
+			
+			}
+		}
+		
+		private void populateInvitedGamesWithOutcome()
+		{
+			UserService userService = UserServiceFactory.getUserService();
+            User user1 = userService.getCurrentUser();
+            
+			ArrayList<User> users = new ArrayList<User>();
+			EntityManager em = EMF.get().createEntityManager();
+			
+			boolean loadData = true;
 			
 						
 			if (loadData){
