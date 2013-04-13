@@ -78,12 +78,12 @@
   	</security-constraint> -->
 	
 	<servlet>
-    	<servlet-name>Authenticate</servlet-name>
-    	<servlet-class>ece1779.appengine.Authenticate</servlet-class>
+    	<servlet-name>GameContents</servlet-name>
+    	<servlet-class>ece1779.appengine.GameContents</servlet-class>
   	</servlet>
   	<servlet-mapping>
-   	 	<servlet-name>Authenticate</servlet-name>
-    	<url-pattern>/Authenticate</url-pattern>
+   	 	<servlet-name>GameContents</servlet-name>
+    	<url-pattern>/GameContents</url-pattern>
   	</servlet-mapping>
   	<servlet>
     	<servlet-name>PopulateTestData</servlet-name>

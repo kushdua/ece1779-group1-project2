@@ -125,7 +125,7 @@
 		}
 		else
 		{
-			$("#error").class -= "hidden";
+			$("#error").toggleClass("hidden");
 			if(myTurn===false)
 			{
 				$("#error").text($("#error").text()+"It is not your turn yet!\n");

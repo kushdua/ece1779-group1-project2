@@ -83,14 +83,23 @@ public class TTTGame {
 		try
 		{
 			Query query = null;
-            List<TTTGame> results = null;
+            List<TTTGame> resultsUser1 = null, resultsUser2 = null;
 
             // Query for all entities of a kind
-            query = em.createQuery("SELECT g from TTTGame g WHERE user1=:user1 OR user2=:user2");
+            query = em.createQuery("SELECT g from TTTGame g WHERE user1=:user1");
             query.setParameter("user1", userId);
-            query.setParameter("user2", userId);
-            results = (List<TTTGame>) query.getResultList();
-            games.addAll(results);
+            resultsUser1 = (List<TTTGame>) query.getResultList();
+            query = em.createQuery("SELECT g from TTTGame g WHERE user2=:user1");
+            query.setParameter("user1", userId);
+            resultsUser2 = (List<TTTGame>) query.getResultList();
+            for(TTTGame g : resultsUser1)
+            {
+            	if(!games.contains(g)) games.add(g);
+            }
+            for(TTTGame g : resultsUser2)
+            {
+            	if(!games.contains(g)) games.add(g);
+            }
 		}
 		finally
 		{
@@ -159,5 +168,30 @@ public class TTTGame {
 		{
 			winner=2;
 		}
+	}
+	
+	public int getWinner()
+	{
+		return winner;
+	}
+	
+	public User getUser1()
+	{
+		return user1;
+	}
+	
+	public User getUser2()
+	{
+		return user2;
+	}
+	
+	public void setNextTurnUser(User user)
+	{
+		this.nextTurnUser=user;
+	}
+	
+	public User getNextTurnUser()
+	{
+		return nextTurnUser;
 	}
 }
