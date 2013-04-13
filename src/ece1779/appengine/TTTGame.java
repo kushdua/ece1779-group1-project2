@@ -45,9 +45,13 @@ public class TTTGame {
     @Basic
     private int winner;
     
+    @Basic
+    private ArrayList<String> boardHistory;
+    
     @Transient
     private String emptyBoard = " , , , , , , , , ";
 
+    //Empty game with two users
     public TTTGame(User user1, User user2) {
     	this.user1=user1;
     	this.user2=user2;
@@ -56,11 +60,22 @@ public class TTTGame {
     	this.setAccepted(false);
     }
     
+    //Empty game with provided game ID
     public TTTGame(int gameId)
     {
     	this.user1=null;
     	this.user2=null;
     	this.gameId = gameId;
+    	this.contentsOfBoard=emptyBoard;
+    	this.setActive(false);
+    	this.setAccepted(false);
+    }
+    
+    //Empty game with auto generated game ID
+    public TTTGame()
+    {
+    	this.user1=null;
+    	this.user2=null;
     	this.contentsOfBoard=emptyBoard;
     	this.setActive(false);
     	this.setAccepted(false);
@@ -193,5 +208,15 @@ public class TTTGame {
 	public User getNextTurnUser()
 	{
 		return nextTurnUser;
+	}
+	
+	public ArrayList<String> getBoardHistory()
+	{
+		return boardHistory;
+	}
+	
+	public void addToBoardHistory(String currentBoard)
+	{
+		boardHistory.add(currentBoard);
 	}
 }
