@@ -103,6 +103,16 @@
 		}
 	}
 	
+	function getGameBoardContents()
+	{
+		return $.ajax({
+		    type: "GET",
+		    url: "GameContents?,
+		    async: false,
+        }).responseText;
+	}
+	
+	
 	function cellClickedHandler(row, col)
 	{
 		if(myTurn===true && gameBoard[row*3+col]===" ")
@@ -112,6 +122,14 @@
 			{
 				gameBoard[row*3+col]="o";
 				//TODO send to JSP on server
+				$.ajax({
+					url: "http://fiddle.jshell.net/favicon.png",
+					beforeSend: function ( xhr ) {
+						   xhr.overrideMimeType("text/plain; charset=x-user-defined");
+					}
+				}).done(function ( data ) {
+					
+				});
 				$("#row"+row+"Col"+col).attr('src',imageO);
 			}
 			else if(myPiece == "x")
