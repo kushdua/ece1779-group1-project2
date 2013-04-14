@@ -43,20 +43,21 @@
 </script>
 
 <%
-ArrayList<String> names=UserPrefs.getUsers(user);//new ArrayList<String>();
-
-//names.add("kush");
-//names.add("bob");
-//names.add("abcd");
-
+ArrayList<Entity> names=Helper.getUsers();//new ArrayList<String>();
+int totalUsers = names.size();
+Entity en;
+User user1;
 
 %>
 <select size="1" name="names" >
 <%
-for(int i=0;i<names.size();i++) 
+for(int i=0;i<totalUsers;i++) 
 { 
+	
+	en=names.get(i);
+	user1=((User)en.getProperty("user"));
 	//TODO make value userID (servlet giving you data needs to give you <userID,userName>)
-	%><option value<%=i%>><%=names.get(i)%></option><%
+	%><option value<%=user1.getEmail()%>><%=user1.getEmail()%></option><%
 		
 }
 %>
