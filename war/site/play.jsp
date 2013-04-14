@@ -3,16 +3,6 @@
 <head>
 <title>Play TicTacToe</title>
 <!-- Sign in template from Bootstrap site modified for ECE1779 AWS project -->
-<!-- Bootstrap -->
-<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
-
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
-<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-<!--[if lt IE 9]>
-  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-<![endif]-->
 </head>
 <body onload="setupBoard()">
 
@@ -62,19 +52,12 @@
 <script type="text/javascript">
 	<%
 		//Grab contents of specified game.
-		int gameId = -1;
-		try
-		{
-			gameId = Integer.parseInt(request.getParameter("gameID"));
-		}
-		catch(NumberFormatException e)
-		{
-		}
+		String gameId = request.getParameter("gameID");
 		//TODO AJAX request for game contents (separated by ,) and
 		//turn (concatenated to game contents by ;)
 		String gameBoardContents = "o, , , ,x,o, ,o,x;1;x";
 	%>
-	var gameBoardContents = "<%= gameBoardContents %>";
+	var gameBoardContents = getGameBoardContents(); //"<%= gameBoardContents %>";
 	var split1 = gameBoardContents.split(";");
 	var gameBoard = split1[0].split(",");
 	var myTurn = (split1[1]=="1") ? true : false;
@@ -122,7 +105,7 @@
 		    url: "GameContents?gameID="+gameID+"&gameBoardContents="+getGameBoardString()+"&gameDone="+gameDone,
 		    async: false,
         }); */
-		$.post("GameContents", { gameID: gameID, gameBoardContents: getGameBoardString(), gameDone: gameDone } );
+		$.post("/GameContents", { gameID: gameID, gameBoardContents: getGameBoardString(), gameDone: gameDone } );
 	}
     
     function getGameBoardContents()
@@ -133,7 +116,7 @@
             async: false,
         }).responseText; */
         var returnedData = "";
-        $.post("GameContents", { gameID: gameID } ).done(function(data){returnedData = data;});
+        $.post("/GameContents", { gameID: gameID } ).done(function(data){returnedData = data;});
         return returnedData;
     }
 	

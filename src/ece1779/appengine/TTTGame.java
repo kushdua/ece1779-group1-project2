@@ -84,45 +84,6 @@ public class TTTGame {
     public int getGameId() {
         return gameId;
     }
-    
-    /**
-     * Get list of games for a user.
-     * @param userId	User ID for which to return list of games
-     * @return			Array of game IDs
-     */
-    public static ArrayList<TTTGame> getGames(int userId)
-    {
-    	ArrayList<TTTGame> games = new ArrayList<TTTGame>();
-    	EntityManager em = EMF.get().createEntityManager();
-    	
-		try
-		{
-			Query query = null;
-            List<TTTGame> resultsUser1 = null, resultsUser2 = null;
-
-            // Query for all entities of a kind
-            query = em.createQuery("SELECT g from TTTGame g WHERE user1=:user1");
-            query.setParameter("user1", userId);
-            resultsUser1 = (List<TTTGame>) query.getResultList();
-            query = em.createQuery("SELECT g from TTTGame g WHERE user2=:user1");
-            query.setParameter("user1", userId);
-            resultsUser2 = (List<TTTGame>) query.getResultList();
-            for(TTTGame g : resultsUser1)
-            {
-            	if(!games.contains(g)) games.add(g);
-            }
-            for(TTTGame g : resultsUser2)
-            {
-            	if(!games.contains(g)) games.add(g);
-            }
-		}
-		finally
-		{
-			em.close();
-		}
-    	
-    	return games;
-    }
 
     public static TTTGame getGame(int gameId) {
         TTTGame game = null;

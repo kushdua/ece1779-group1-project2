@@ -20,7 +20,7 @@ SuccessMsg
 ErrorMsg
 	 */
     @Id
-    private String userId;
+    private String userEmail;
 
     @Basic
     private String errorMessages;
@@ -47,8 +47,8 @@ ErrorMsg
     private int GamesLost;
       
 
-    public UserPrefs(String userId) {
-        this.userId = userId;
+    public UserPrefs(String userEmail) {
+        this.userEmail = userEmail;
         this.errorMessages = "";
         this.successMessages = "";
         this.user=null;
@@ -58,10 +58,9 @@ ErrorMsg
         this.GamesDrawn = 0;
         this.GamesLost = 0;
     }
-    
 
-    public String getUserId() {
-        return userId;
+    public String getUserEmail() {
+        return userEmail;
     }
 
     public User getUser() {
@@ -96,15 +95,29 @@ ErrorMsg
     	this.GamesDrawn += 1;
     }
         
+    public static UserPrefs getUserPrefs(String userEmail)
+    {
+    	EntityManager em = EMF.get().createEntityManager();
+    	UserPrefs userPrefs = null;
+    	try
+    	{
+    		userPrefs = em.find(UserPrefs.class, userEmail);
+    	}
+    	finally
+    	{
+    		em.close();
+    	}
+    	return userPrefs;
+    }
     
     public static UserPrefs getPrefsForUser(User user, boolean loggedIn) {
         UserPrefs userPrefs = null;
 
         EntityManager em = EMF.get().createEntityManager();
         try {
-            userPrefs = em.find(UserPrefs.class, user.getUserId());
+            userPrefs = em.find(UserPrefs.class, user.getEmail());
             if (userPrefs == null) {
-                userPrefs = new UserPrefs(user.getUserId());
+                userPrefs = new UserPrefs(user.getEmail());
                 userPrefs.setUser(user);
                 userPrefs.setLoggedIn(loggedIn);
                 em.persist(userPrefs);

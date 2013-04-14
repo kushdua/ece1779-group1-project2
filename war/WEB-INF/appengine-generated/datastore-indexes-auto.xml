@@ -1,11 +1,11 @@
-<!-- Indices written at Fri, 12 Apr 2013 15:13:50 EDT -->
+<!-- Indices written at Sat, 13 Apr 2013 22:20:43 EDT -->
 
 <datastore-indexes>
 
     <!-- Used 1 time in query history -->
     <datastore-index kind="TTTGame" ancestor="false" source="auto">
         <property name="isAccepted" direction="asc"/>
-        <property name="user1" direction="asc"/>
+        <property name="user2" direction="asc"/>
         <property name="winner" direction="asc"/>
         <property name="__key__" direction="desc"/>
     </datastore-index>
@@ -13,7 +13,7 @@
     <!-- Used 1 time in query history -->
     <datastore-index kind="TTTGame" ancestor="false" source="auto">
         <property name="isAccepted" direction="asc"/>
-        <property name="user2" direction="asc"/>
+        <property name="user1" direction="asc"/>
         <property name="winner" direction="asc"/>
         <property name="__key__" direction="desc"/>
     </datastore-index>

@@ -3,20 +3,38 @@
 <%@page import="com.google.appengine.api.users.UserServiceFactory" %>
 <%@page import="ece1779.appengine.*" %>
 
+<!-- Bootstrap -->
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
 <%
    UserService userService = UserServiceFactory.getUserService();
 /* if(userService == null) response.getWriter().println("user service is null");
- */   User user = userService.getCurrentUser();
+ */   /* if(Helper.currentLoggedInUser==null){
+	    Helper.currentLoggedInUser = userService.getCurrentUser();	 
+	  } */
+      User user = userService.getCurrentUser(); //Helper.currentLoggedInUser;
 /*    if(user == null) response.getWriter().println("user is null");
  */   UserPrefs userPrefs = null;
+   String onLoadLoginHandler = "";
    
    if(user!=null)
    {
    		userPrefs = UserPrefs.getPrefsForUser(user,true);
+   		onLoadLoginHandler = "$.post('/AuthenticateUpdate', {userID: '" + user.getEmail() +"', action: 'login'});";
    }
 %>
 
-<div class="navbar navbar-inverse">
+<script><%= onLoadLoginHandler %></script>
+
+<div class="navbar navbar-inverse" onload="<%= onLoadLoginHandler %>">
     <div class="navbar-inner">
         <a class="brand" href="#">ECE1779 AppEngine Project</a>
         <ul class="nav">
@@ -36,7 +54,7 @@
                     "<li><a href='view_games.jsp'>View Games</a></li>" %>
             <% if(user!=null && userService!=null)
             { %>
-            	<li><a href="<%= userService.createLogoutURL("/") %>">Logout</a></li>
+            	<li><a href="<%= userService.createLogoutURL("/") %>" onclick="$.post('/AuthenticateUpdate',{userID: '<%= user.getEmail() %>', action: 'logout'});">Logout</a></li>
             <% }  else if(user==null) { %> <li><a href="<%= userService.createLoginURL("/") %>">Login</a></li><% } %>
         <% } %>
         </ul>

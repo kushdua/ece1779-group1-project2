@@ -85,6 +85,14 @@
    	 	<servlet-name>GameContents</servlet-name>
     	<url-pattern>/GameContents</url-pattern>
   	</servlet-mapping>
+    <servlet>
+        <servlet-name>AuthenticateUpdate</servlet-name>
+        <servlet-class>ece1779.appengine.AuthenticateUpdate</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AuthenticateUpdate</servlet-name>
+        <url-pattern>/AuthenticateUpdate</url-pattern>
+    </servlet-mapping>
   	<servlet>
     	<servlet-name>PopulateTestData</servlet-name>
     	<servlet-class>ece1779.appengine.PopulateTestData</servlet-class>
