@@ -90,5 +90,28 @@ public class Helper {
         return gamelist;
         
     }
+	
+	
+	 public static ArrayList<Entity> getUsers()
+	    {
+	    	
+			UserService userService = UserServiceFactory.getUserService();
+	        User currentUser = userService.getCurrentUser();
+	        
+	     // Get the Datastore Service
+	        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+	        
+	        Filter fltr = new FilterPredicate("user",FilterOperator.NOT_EQUAL,currentUser);
+	        
+	        // Use class Query to assemble a query
+	     	Query q = new Query("UserPrefs").setFilter(fltr);
+
+	        PreparedQuery pq = datastore.prepare(q);
+	            
+	        List<Entity> games =  pq.asList(FetchOptions.Builder.withLimit(1000));
+	        ArrayList<Entity> gamelist = new ArrayList<Entity>();
+	        gamelist.addAll(games);
+			return gamelist;
+	    }
 
 }

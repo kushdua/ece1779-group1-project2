@@ -7,9 +7,9 @@ import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.Id;
-import javax.persistence.Query;
-
 import com.google.appengine.api.users.User;
+
+
 
 @Entity(name = "UserPrefs")
 public class UserPrefs {
@@ -120,9 +120,22 @@ ErrorMsg
 
         return userPrefs;
     }
-    
-    public static ArrayList<String> getUsers(User exceptUser)
+    /*
+    public static ArrayList<Entity> getUsers()
     {
+    	
+		UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+        
+     // Get the Datastore Service
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        
+        Filter fltr = new FilterPredicate("user1",FilterOperator.NOT_EQUAL,currentUser);
+        
+        // Use class Query to assemble a query
+     		Query q = new Query("TTTGame").setFilter(fltr);
+
+        /* OLD WAY
     	EntityManager em = EMF.get().createEntityManager();
         ArrayList<String>resultsList = new ArrayList<String>();
     	try
@@ -140,8 +153,15 @@ ErrorMsg
 		{
 			em.close();
 		}
-        return resultsList;
-    }
+     		
+     	// Use PreparedQuery interface to retrieve results
+            PreparedQuery pq = datastore.prepare(q);
+            
+        List<com.google.appengine.api.datastore.Entity> games =  pq.asList(FetchOptions.Builder.withLimit(1000));
+        ArrayList<Entity> gamelist = new ArrayList<Entity>();
+        gamelist.addAll(games);
+		return gamelist;
+    }*/
 
     public void save() {
         EntityManager em = EMF.get().createEntityManager();
