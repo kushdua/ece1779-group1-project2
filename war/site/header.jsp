@@ -32,7 +32,7 @@
    }
 %>
 
-<script><%= onLoadLoginHandler %></script>
+<script type="text/javascript"><%= onLoadLoginHandler %></script>
 
 <div class="navbar navbar-inverse" onload="<%= onLoadLoginHandler %>">
     <div class="navbar-inner">

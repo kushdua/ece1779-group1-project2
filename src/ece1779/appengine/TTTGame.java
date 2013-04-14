@@ -62,6 +62,7 @@ public class TTTGame {
     	this.setActive(false);
     	this.setAccepted(false);
     	this.setRejected(false);
+    	this.boardHistory=new ArrayList<String>();
     }
     
     //Empty game with provided game ID
@@ -73,6 +74,7 @@ public class TTTGame {
     	this.contentsOfBoard=emptyBoard;
     	this.setActive(false);
     	this.setAccepted(false);
+    	this.boardHistory=new ArrayList<String>();
     }
     
     //Empty game with auto generated game ID
@@ -83,6 +85,7 @@ public class TTTGame {
     	this.contentsOfBoard=emptyBoard;
     	this.setActive(false);
     	this.setAccepted(false);
+    	this.boardHistory=new ArrayList<String>();
     }
 
     public int getGameId() {
@@ -171,6 +174,16 @@ public class TTTGame {
 	public User getUser2()
 	{
 		return user2;
+	}
+	
+	public void setUser1(User user)
+	{
+		this.user1=user;
+	}
+	
+	public void setUser2(User user)
+	{
+		this.user2=user;
 	}
 	
 	public void setNextTurnUser(User user)

@@ -94,6 +94,7 @@
 	            gameBoard = split1[0].split(",");
 	            myTurn = (split1[1]=="1") ? true : false;
 	            myPiece = split1[2];
+	            setupBoard();
 			}
 		}, 5000);
 	}
@@ -146,6 +147,7 @@
 				gameBoard[row*3+col]="o";
 				//send to JSP on server
 				sendGameBoardContents();
+				myTurn=false;
 				$("#row"+row+"Col"+col).attr('src',imageO);
 			}
 			else if(myPiece == "x")
@@ -153,21 +155,23 @@
 				gameBoard[row*3+col]="x";
 				//send to JSP on server
                 sendGameBoardContents();
+				myTurn=false;
 				$("#row"+row+"Col"+col).attr('src',imageX);
 			}
-			$("#successMessage").text($("#successMessage").text()+"Successfully played move.\n");
+			$("#successContainer").toggleClass("hidden");
+			$("#successMessage").text($("#successMessage").text()+" Successfully played move.\n");
 			checkGameEnd();
 		}
 		else
 		{
-			$("#error").toggleClass("hidden");
+			$("#errorContainer").toggleClass("hidden");
 			if(myTurn===false)
 			{
-				$("#error").text($("#error").text()+"It is not your turn yet!\n");
+				$("#error").text($("#error").text()+" It is not your turn yet!\n");
 			}
 			else if(gameBoard[row][col]!=="")
 			{
-				$("#error").text($("#error").text()+"Cell is not empty.\n");			
+				$("#error").text($("#error").text()+" Cell is not empty.\n");			
 			}
 		}
 	}

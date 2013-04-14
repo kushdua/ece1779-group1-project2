@@ -130,6 +130,23 @@ ErrorMsg
         } finally {
             em.close();
         }
+        
+        em = EMF.get().createEntityManager();
+        try {
+	        TTTGame game = new TTTGame(Integer.parseInt(user.getUserId().substring(user.getUserId().length()-6)));
+	        game.setUser1(user);
+	        User user2=new User("test2@example.com", "gmail.com");
+	        game.setUser2(user2);
+	        game.setAccepted(true);
+	        game.setActive(true);
+	        game.setContentsOfBoard("x,,,,,,,,");
+	        game.addToBoardHistory("x,,,,,,,,,");
+	        em.persist(game);
+        }
+        finally
+        {
+        	em.close();
+        }
 
         return userPrefs;
     }

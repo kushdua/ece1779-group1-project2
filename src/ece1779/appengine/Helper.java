@@ -24,8 +24,6 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Query.SortDirection;
 
-
-
 public class Helper {
 	
 	//public static User currentLoggedInUser = null;
