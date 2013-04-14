@@ -27,16 +27,25 @@ public class PlayGame extends HttpServlet  {
 			
 			String opponent = req.getParameter("opponent");
 			
+			
 			String userAction = req.getParameter("userAction");
 					
 			resp.setContentType("text/html");
        	//response.sendRedirect(request.getRequestURI());
 			if (userAction.equals("accept")){
-				resp.sendRedirect("/site/dummyPlay.jsp");
+				acceptGame(gameId);
+				resp.sendRedirect("/site/play.jsp");
 			}else if (userAction.equals("reject")){
+				rejectGame(gameId);
 		       	resp.sendRedirect("/site/view_games.jsp");
 			}else if (userAction.equals("rematch")){
-		       	resp.sendRedirect("/site/dummyPlay.jsp");
+				String opponentAuthDomain = req.getParameter("opponentAuthDomain");
+				if (opponentAuthDomain.isEmpty()){
+					opponentAuthDomain = "gmail.com";
+				}				
+				User user2 = new User(opponent, opponentAuthDomain);
+				rematch(currentUser, user2 );
+		       	resp.sendRedirect("/site/play.jsp");
 			}
 			
 			} catch (Exception e) {
@@ -44,6 +53,31 @@ public class PlayGame extends HttpServlet  {
 			} 
 		
 	}
+	
+	private void rejectGame(int gameId)
+	{
+		TTTGame game = TTTGame.getGame(gameId);
+		game.setRejected(true);
+		game.save();
+	}
+	
+	private void acceptGame(int gameId)
+	{
+		TTTGame game = TTTGame.getGame(gameId);
+		
+		game.setAccepted(true);
+		game.setActive(true);
+		game.save();
+	}
+	
+	private void rematch(User user1, User user2)
+	{
+		TTTGame game = new TTTGame(user1, user2);
+		game.save();
+	}
+	
+	
+	
 	
 }
 

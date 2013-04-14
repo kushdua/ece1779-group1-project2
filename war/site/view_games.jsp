@@ -17,7 +17,7 @@
 <script type="text/javascript">
 	function startNewGame()
 	{
-		window.location="/site/dummyPlay.jsp";
+		window.location="/site/selectplayer.jsp";
 	}
 </script>
 
@@ -140,6 +140,7 @@ for(int i=0;i<totalGames;i++){
 	        		      	<form action="/playgame" method="post">
 	        		      		<input type="hidden" name="gameId" value="0"  >
 	        		      		<input type="hidden" name="opponent" value=<%= opponent1 %>  >
+	        		      		<input type="hidden" name="opponentAuthDomain" value=<%= opponent1.getAuthDomain() %>  >
 	        		      		<input type="hidden" name="userAction" value="rematch" >
 	        		      		<button class="btn btn-small btn-primary" name="rematchBtn" type="submit" >Rematch</button>
 	        		      	</form>

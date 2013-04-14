@@ -1,10 +1,15 @@
 package ece1779.appengine;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.Id;
 import com.google.appengine.api.users.User;
+
+
 
 @Entity(name = "UserPrefs")
 public class UserPrefs {
@@ -128,6 +133,48 @@ ErrorMsg
 
         return userPrefs;
     }
+    /*
+    public static ArrayList<Entity> getUsers()
+    {
+    	
+		UserService userService = UserServiceFactory.getUserService();
+        User currentUser = userService.getCurrentUser();
+        
+     // Get the Datastore Service
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        
+        Filter fltr = new FilterPredicate("user1",FilterOperator.NOT_EQUAL,currentUser);
+        
+        // Use class Query to assemble a query
+     		Query q = new Query("TTTGame").setFilter(fltr);
+
+        /* OLD WAY
+    	EntityManager em = EMF.get().createEntityManager();
+        ArrayList<String>resultsList = new ArrayList<String>();
+    	try
+		{
+	        Query query = em.createQuery("SELECT * from UserPrefs");// WHERE i.user1 != :user1 AND i.user2 != :user2");
+//	        query.setParameter("user1", exceptUser);
+//	        query.setParameter("user2", exceptUser);
+	        List<UserPrefs> users = (List<UserPrefs>) query.getResultList();
+	        for(UserPrefs u : users)
+	        {
+	        	if(u.getUser().compareTo(exceptUser)!=0) resultsList.add(u.userId+","+u.getUser().getEmail());
+	        }
+		}
+    	finally
+		{
+			em.close();
+		}
+     		
+     	// Use PreparedQuery interface to retrieve results
+            PreparedQuery pq = datastore.prepare(q);
+            
+        List<com.google.appengine.api.datastore.Entity> games =  pq.asList(FetchOptions.Builder.withLimit(1000));
+        ArrayList<Entity> gamelist = new ArrayList<Entity>();
+        gamelist.addAll(games);
+		return gamelist;
+    }*/
 
     public void save() {
         EntityManager em = EMF.get().createEntityManager();

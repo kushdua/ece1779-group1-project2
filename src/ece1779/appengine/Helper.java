@@ -43,8 +43,9 @@ public class Helper {
          
         Filter userFilter = new FilterPredicate("user2",FilterOperator.EQUAL,currentUser);
         Filter isAccepted = new FilterPredicate("isAccepted",FilterOperator.EQUAL,false);
+        Filter isRejected = new FilterPredicate("isRejected",FilterOperator.EQUAL,false);
         
-        Filter fltr = CompositeFilterOperator.and(userFilter ,isAccepted );
+        Filter fltr = CompositeFilterOperator.and(userFilter ,isAccepted,isRejected );
         		  
         
      // Use class Query to assemble a query
@@ -73,9 +74,10 @@ public class Helper {
         Filter userFilter = CompositeFilterOperator.or(user1Filter, user2Filter);
                 
         Filter isAccepted = new FilterPredicate("isAccepted",FilterOperator.EQUAL,true);
+        Filter isCompleted = new FilterPredicate("isActive",FilterOperator.EQUAL,false);
         Filter winner = new FilterPredicate("winner",FilterOperator.GREATER_THAN,0);
         
-        Filter fltr = CompositeFilterOperator.and(userFilter ,isAccepted, winner );
+        Filter fltr = CompositeFilterOperator.and(userFilter ,isAccepted, isCompleted, winner );
         		  
         
      // Use class Query to assemble a query
@@ -92,6 +94,29 @@ public class Helper {
         return gamelist;
         
     }
+	
+	
+	 public static ArrayList<Entity> getUsers()
+	    {
+	    	
+			UserService userService = UserServiceFactory.getUserService();
+	        User currentUser = userService.getCurrentUser();
+	        
+	     // Get the Datastore Service
+	        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+	        
+	        Filter fltr = new FilterPredicate("user",FilterOperator.NOT_EQUAL,currentUser);
+	        
+	        // Use class Query to assemble a query
+	     	Query q = new Query("UserPrefs").setFilter(fltr);
+
+	        PreparedQuery pq = datastore.prepare(q);
+	            
+	        List<Entity> games =  pq.asList(FetchOptions.Builder.withLimit(1000));
+	        ArrayList<Entity> gamelist = new ArrayList<Entity>();
+	        gamelist.addAll(games);
+			return gamelist;
+	    }
 
 	public static ArrayList<Entity> getGamesInProgress()
     {
