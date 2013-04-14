@@ -30,6 +30,9 @@ public class TTTGame {
     
     @Basic
     private boolean isAccepted;
+    
+	@Basic
+    private boolean isRejected;
 
     // | X |  |  |
     // |   |  |  |
@@ -58,6 +61,7 @@ public class TTTGame {
     	this.contentsOfBoard=emptyBoard;
     	this.setActive(false);
     	this.setAccepted(false);
+    	this.setRejected(false);
     }
     
     //Empty game with provided game ID
@@ -166,6 +170,14 @@ public class TTTGame {
 		this.isAccepted = isAccepted;
 	}
 
+	public boolean isRejected() {
+		return isRejected;
+	}
+
+	public void setRejected(boolean isRejected) {
+		this.isRejected = isRejected;
+	}
+	
 	public String getContentsOfBoard() {
 		return contentsOfBoard;
 	}

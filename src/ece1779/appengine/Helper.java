@@ -41,8 +41,9 @@ public class Helper {
          
         Filter userFilter = new FilterPredicate("user2",FilterOperator.EQUAL,currentUser);
         Filter isAccepted = new FilterPredicate("isAccepted",FilterOperator.EQUAL,false);
+        Filter isRejected = new FilterPredicate("isRejected",FilterOperator.EQUAL,false);
         
-        Filter fltr = CompositeFilterOperator.and(userFilter ,isAccepted );
+        Filter fltr = CompositeFilterOperator.and(userFilter ,isAccepted,isRejected );
         		  
         
      // Use class Query to assemble a query
@@ -71,9 +72,10 @@ public class Helper {
         Filter userFilter = CompositeFilterOperator.or(user1Filter, user2Filter);
                 
         Filter isAccepted = new FilterPredicate("isAccepted",FilterOperator.EQUAL,true);
+        Filter isCompleted = new FilterPredicate("isActive",FilterOperator.EQUAL,false);
         Filter winner = new FilterPredicate("winner",FilterOperator.GREATER_THAN,0);
         
-        Filter fltr = CompositeFilterOperator.and(userFilter ,isAccepted, winner );
+        Filter fltr = CompositeFilterOperator.and(userFilter ,isAccepted, isCompleted, winner );
         		  
         
      // Use class Query to assemble a query
