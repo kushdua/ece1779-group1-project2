@@ -67,7 +67,7 @@ public class GameContents extends HttpServlet {
         			response.getWriter().println("Invalid gameBoardContents string passed in ("+gameBoardContents+"). Format should be <comma delimited string of board contents>;<user turn - 1 or 2>;<sending user's board piece - optional>");
         		}
         	}
-        	else
+        	else if(gameID!=null && gameID.length()>0)
         	{
         		//Get
         		TTTGame game = TTTGame.getGame(gameID);
@@ -79,6 +79,10 @@ public class GameContents extends HttpServlet {
 	        		answer+=(game.getUser1().compareTo(user)==0 ? ";x":";o");
         		}
         		response.getWriter().print(answer);
+        	}
+        	else
+        	{
+        		response.getWriter().println("Game ID cannot be null.");
         	}
         }
         else
