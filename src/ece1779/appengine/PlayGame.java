@@ -23,7 +23,7 @@ public class PlayGame extends HttpServlet  {
        try {
 			
 			
-			int gameId = Integer.parseInt(req.getParameter("gameId"));
+			String gameId = req.getParameter("gameId");
 			
 			String opponent = req.getParameter("opponent");
 			
@@ -54,14 +54,14 @@ public class PlayGame extends HttpServlet  {
 		
 	}
 	
-	private void rejectGame(int gameId)
+	private void rejectGame(String gameId)
 	{
 		TTTGame game = TTTGame.getGame(gameId);
 		game.setRejected(true);
 		game.save();
 	}
 	
-	private void acceptGame(int gameId)
+	private void acceptGame(String gameId)
 	{
 		TTTGame game = TTTGame.getGame(gameId);
 		

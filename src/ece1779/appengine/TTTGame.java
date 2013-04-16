@@ -3,9 +3,14 @@ package ece1779.appengine;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.PrimaryKey;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Query;
 import javax.persistence.Transient;
@@ -15,7 +20,8 @@ import com.google.appengine.api.users.User;
 @Entity(name = "TTTGame")
 public class TTTGame {
     @Id
-    private int gameId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String gameId;
     
     //User 1 (initiated game)
     @Basic
@@ -66,7 +72,7 @@ public class TTTGame {
     }
     
     //Empty game with provided game ID
-    public TTTGame(int gameId)
+    public TTTGame(String gameId)
     {
     	this.user1=null;
     	this.user2=null;
@@ -88,11 +94,11 @@ public class TTTGame {
     	this.boardHistory=new ArrayList<String>();
     }
 
-    public int getGameId() {
+    public String getGameId() {
         return gameId;
     }
 
-    public static TTTGame getGame(int gameId) {
+    public static TTTGame getGame(String gameId) {
         TTTGame game = null;
 
         EntityManager em = EMF.get().createEntityManager();
