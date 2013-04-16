@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import com.google.appengine.api.users.User;
 
@@ -25,6 +27,7 @@ SuccessMsg
 ErrorMsg
 	 */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String userEmail;
 
     @Basic
@@ -133,7 +136,7 @@ ErrorMsg
         
         em = EMF.get().createEntityManager();
         try {
-	        TTTGame game = new TTTGame(Integer.parseInt(user.getUserId().substring(user.getUserId().length()-6)));
+	        TTTGame game = new TTTGame(user.getUserId());
 	        game.setUser1(user);
 	        User user2=new User("test2@example.com", "gmail.com");
 	        game.setUser2(user2);

@@ -35,8 +35,12 @@
 		//TODO: Take the selected user i.e the name and id of that player
 		// and start a new game -- make a call to servelet and then pass the arguments
 		//user1 = you (header.jsp has JSP variable for user). user2=other guy
+		var e = document.getElementById("select1");
+	    var strSel = "The Value is: " + e.options[e.selectedIndex].value + " and text is: " + e.options[e.selectedIndex].text;
 		
-		//After invitation is send .. redirect the page to view_games.jsp page
+		$.post("/StartNewGame", { user2: e.options[e.selectedIndex].text } );
+	    
+	    //After invitation is send .. redirect the page to view_games.jsp page
 		window.location="/site/view_games.jsp";
 
 	}
@@ -49,7 +53,7 @@ Entity en;
 User user1;
 
 %>
-<select size="1" name="names" >
+<select id ="select1" size="1" name="names" >
 <%
 for(int i=0;i<totalUsers;i++) 
 { 

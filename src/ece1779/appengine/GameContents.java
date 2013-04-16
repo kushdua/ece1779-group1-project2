@@ -36,16 +36,7 @@ public class GameContents extends HttpServlet {
         
         if(user!=null)
         {
-        	int gameID = -1;
-        	try
-        	{
-        		gameID = Integer.parseInt(request.getParameter("gameID"));
-        	}
-        	catch(NumberFormatException nfe)
-        	{
-        		response.getWriter().println("Invalid game ID provided ("+request.getParameter("gameID")+").");
-        		return;
-        	}
+        	String gameID = request.getParameter("gameID");
         	
         	//Game ID properly passed in at this point.
         	String gameBoardContents = request.getParameter("gameBoardContents");
