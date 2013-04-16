@@ -138,8 +138,9 @@ ErrorMsg
         	        game.setUser2(user2);
         	        game.setAccepted(true);
         	        game.setActive(true);
-        	        game.setContentsOfBoard("x,,,,,,,,");
-        	        game.addToBoardHistory("x,,,,,,,,,");
+        	        game.setNextTurnUser(user2);
+        	        game.setContentsOfBoard("x, , , , , , , , ");
+        	        game.addToBoardHistory("x, , , , , , , , ");
         	        em2.persist(game);
                 }
                 finally

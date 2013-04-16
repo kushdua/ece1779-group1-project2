@@ -16,35 +16,35 @@
 	</div>
 	<div class="alert alert-error hidden" id="errorContainer">
 		<a class="close" data-dismiss="alert">×</a>
-		<p class= id="error"/>
+		<p class= id="error" />
 	</div>
-    <ul class="thumbnails" height="300px" width="300px">
+    <ul class="thumbnails">
 		<li>
-			<a href="#"><img class="span3" id="row0Col0" onClick="cellClickedHandler(0,0)" /></a>
+			<a href="#"><img class="span3" id="row0Col0" onClick="cellClickedHandler(0,0)" style="height:100px; width:100px; border:1px solid #021a40;" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row0Col1" onClick="cellClickedHandler(0,1)" /></a>
+			<a href="#"><img class="span3" id="row0Col1" onClick="cellClickedHandler(0,1)" style="height:100px; width:100px border:1px solid #021a40;" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row0Col2" onClick="cellClickedHandler(0,2)" /></a>
+			<a href="#"><img class="span3" id="row0Col2" onClick="cellClickedHandler(0,2)" style="height:100px; width:100px border:1px solid #021a40;" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row1Col0" onClick="cellClickedHandler(1,0)" /></a>
+			<a href="#"><img class="span3" id="row1Col0" onClick="cellClickedHandler(1,0)" style="height:100px; width:100px border:1px solid #021a40;" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row1Col1" onClick="cellClickedHandler(1,1)" /></a>
+			<a href="#"><img class="span3" id="row1Col1" onClick="cellClickedHandler(1,1)" style="height:100px; width:100px border:1px solid #021a40;" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row1Col2" onClick="cellClickedHandler(1,2)" /></a>
+			<a href="#"><img class="span3" id="row1Col2" onClick="cellClickedHandler(1,2)" style="height:100px; width:100px border:1px solid #021a40;" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row2Col0" onClick="cellClickedHandler(2,0)" /></a>
+			<a href="#"><img class="span3" id="row2Col0" onClick="cellClickedHandler(2,0)" style="height:100px; width:100px border:1px solid #021a40;" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row2Col1" onClick="cellClickedHandler(2,1)" /></a>
+			<a href="#"><img class="span3" id="row2Col1" onClick="cellClickedHandler(2,1)" style="height:100px; width:100px border:1px solid #021a40;" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row2Col2" onClick="cellClickedHandler(2,2)" /></a>
+			<a href="#"><img class="span3" id="row2Col2" onClick="cellClickedHandler(2,2)" style="height:100px; width:100px border:1px solid #021a40;" /></a>
 		</li>
     </ul>
 </div> <!-- /container -->
@@ -63,12 +63,14 @@
 		//turn (concatenated to game contents by ;)
 		String gameBoardContents = "o, , , ,x,o, ,o,x;1;x";
 	%>
-	var gameBoardContents = getGameBoardContents(); //"<%= gameBoardContents %>";
+    var gameID = "<%= gameId %>";
+    var myTurn = false;
+	var gameBoardContents = "";
+	getGameBoardContents();
 	var split1 = gameBoardContents.split(";");
 	var gameBoard = split1[0].split(",");
-	var myTurn = (split1[1]=="1") ? true : false;
+	myTurn = (split1[1]=="1") ? true : false;
 	var myPiece = split1[2];
-	var gameID = <%= gameId %>;
 	var gameDone = false;
 	var winner = -1;
 	
@@ -93,18 +95,21 @@
 				$("#row"+Math.floor(i/3)+"Col"+i%3).attr('src',imageEmpty);
 			}
 		}
-		setTimeout(function(){
-			if(!gameDone)
-			{
-	            gameBoardContents = getGameBoardContents();
-	            split1 = gameBoardContents.split(";");
-	            gameBoard = split1[0].split(",");
-	            myTurn = (split1[1]=="1") ? true : false;
-	            myPiece = split1[2];
-	            setupBoard();
-	            checkGameEnd();
-			}
-		}, 5000);
+ 		setTimeout(timerUpdateGameboard, 5000);
+	}
+	
+	function timerUpdateGameboard()
+	{
+		if(!gameDone)
+        {
+            getGameBoardContents();
+            split1 = gameBoardContents.split(";");
+            gameBoard = split1[0].split(",");
+            myTurn = (split1[1]=="1") ? true : false;
+            myPiece = split1[2];
+            setupBoard();
+            checkGameEnd();
+        }
 	}
 	
 	function sendGameBoardContents()
@@ -124,9 +129,11 @@
             url: "GameContents?gameID="+gameID,
             async: false,
         }).responseText; */
-        var returnedData = "";
-        $.post("/GameContents", { gameID: gameID } ).done(function(data){returnedData = data;});
-        return returnedData;
+        if(myTurn==false)
+        {
+	        var returnedData = "";
+	        $.post("/GameContents", { gameID: gameID } ).done(function(data){gameBoardContents = data;});
+        }
     }
 	
 	function getGameBoardString()
@@ -198,7 +205,7 @@
 			currPiece=gameBoard[row*3+col];
 			
 			//Check that row
-			if(gameBoard[row*3]==currPiece && gameBoard[row*3+1]==currPiece && gameBoard[row*3+2]==currPiece)
+			if(currPiece!=" " && gameBoard[row*3]==currPiece && gameBoard[row*3+1]==currPiece && gameBoard[row*3+2]==currPiece)
 			{
 				$("#successMessage").text($("#successMessage").text()+"Player " + currPiece + " wins.\n");
 				gameDone=true;
@@ -206,7 +213,7 @@
 				setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
 			}
 			//Check that column
-			else if(gameBoard[col]==currPiece && gameBoard[col+3]==currPiece && gameBoard[col+6]==currPiece)
+			else if(currPiece!=" " && gameBoard[col]==currPiece && gameBoard[col+3]==currPiece && gameBoard[col+6]==currPiece)
 			{
 				$("#successMessage").text($("#successMessage").text()+"Player " + currPiece + " wins.\n");
                 gameDone=true;
@@ -214,7 +221,7 @@
 				setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
 			}
 			//Check diagonal up+right /
-			else if(gameBoard[6]==currPiece && gameBoard[3+1]==currPiece && gameBoard[0+2]==currPiece)
+			else if(currPiece!=" " && gameBoard[6]==currPiece && gameBoard[3+1]==currPiece && gameBoard[0+2]==currPiece)
 			{
 				$("#successMessage").text($("#successMessage").text()+"Player " + currPiece + " wins.\n");
                 gameDone=true;
@@ -222,7 +229,7 @@
 				setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
 			}
 			//Check diagonal up+left  \
-			else if(gameBoard[6+2]==currPiece && gameBoard[3+1]==currPiece && gameBoard[0]==currPiece)
+			else if(currPiece!=" " && gameBoard[6+2]==currPiece && gameBoard[3+1]==currPiece && gameBoard[0]==currPiece)
 			{
 				$("#successMessage").text($("#successMessage").text()+"Player " + currPiece + " wins.\n");
                 gameDone=true;
