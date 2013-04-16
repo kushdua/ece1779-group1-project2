@@ -131,18 +131,19 @@ public class Helper {
         Filter userFilter = CompositeFilterOperator.or(user1Filter, user2Filter);
                 
         Filter isAccepted = new FilterPredicate("isAccepted",FilterOperator.EQUAL,true);
+        Filter isActive = new FilterPredicate("isActive",FilterOperator.EQUAL,true);
         
-        Filter fltr = CompositeFilterOperator.and(userFilter ,isAccepted );
+        Filter fltr = CompositeFilterOperator.and(userFilter ,isAccepted, isActive );
         		  
         
      // Use class Query to assemble a query
-		Query q = new Query("TTTGame").setFilter(fltr).addSort("winner", SortDirection.ASCENDING).addSort(com.google.appengine.api.datastore.Entity.KEY_RESERVED_PROPERTY, SortDirection.DESCENDING);
+		Query q = new Query("TTTGame").setFilter(fltr).addSort(com.google.appengine.api.datastore.Entity.KEY_RESERVED_PROPERTY, SortDirection.DESCENDING);
         //.setFilter(userFilter);
 
         // Use PreparedQuery interface to retrieve results
         PreparedQuery pq = datastore.prepare(q);
         
-        List<Entity> games =  pq.asList(FetchOptions.Builder.withLimit(10));
+        List<Entity> games =  pq.asList(FetchOptions.Builder.withLimit(1000));
         ArrayList<Entity> gamelist = new ArrayList<Entity>();
         gamelist.addAll(games);
                 
