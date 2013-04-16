@@ -64,6 +64,7 @@
 	var myPiece = split1[2];
 	var gameID = <%= gameId %>;
 	var gameDone = false;
+	var winner = -1;
 	
 	var imageO = "assets/o.png";
 	var imageX = "assets/x.png";
@@ -95,6 +96,7 @@
 	            myTurn = (split1[1]=="1") ? true : false;
 	            myPiece = split1[2];
 	            setupBoard();
+	            checkGameEnd();
 			}
 		}, 5000);
 	}
@@ -132,7 +134,7 @@
 	        	answer+=",";
 	        }
     	}
-	    answer+=(myTurn?";1":";2");
+	    answer+=(gameDone?";1":(myTurn?";1":";2"));
 	    answer+=myPiece;
 	    return answer;
 	}

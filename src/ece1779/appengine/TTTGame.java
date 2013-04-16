@@ -98,10 +98,10 @@ public class TTTGame {
         EntityManager em = EMF.get().createEntityManager();
         try {
             game = em.find(TTTGame.class, gameId);
-            if (game == null) {
-                game = new TTTGame(gameId);
-                em.persist(game);
-            }
+//            if (game == null) {
+//                game = new TTTGame(gameId);
+//                em.persist(game);
+//            }
         } finally {
             em.close();
         }

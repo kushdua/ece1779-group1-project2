@@ -49,6 +49,7 @@ public class GameContents extends HttpServlet {
         	
         	//Game ID properly passed in at this point.
         	String gameBoardContents = request.getParameter("gameBoardContents");
+        	String gameEnded = request.getParameter("gameEnded");
         	if(gameBoardContents!=null && gameBoardContents.length()>0)
         	{
         		//Set
@@ -56,10 +57,19 @@ public class GameContents extends HttpServlet {
         		String[] split = gameBoardContents.split(";");
         		if(split.length==3 || split.length==2)
         		{
-        			game.setContentsOfBoard(split[0]);
-        			game.setNextTurnUser((split[1].compareTo("1")==0 ? game.getUser1() : game.getUser2()));
-        			game.addToBoardHistory(split[0]);
-        			game.save();
+        			if(game!=null)
+        			{
+	        			game.setContentsOfBoard(split[0]);
+	        			game.setNextTurnUser((split[1].compareTo("1")==0 ? game.getUser1() : game.getUser2()));
+	        			game.addToBoardHistory(split[0]);
+	        			if(gameEnded!=null && gameEnded.length()>0)
+	        			{
+	        				game.setActive(false);
+	        				game.setNextTurnUser(null);
+	        				game.setWinner(userService.getCurrentUser());
+	        			}
+	        			game.save();
+        			}
         		}
         		else
         		{
@@ -71,9 +81,12 @@ public class GameContents extends HttpServlet {
         		//Get
         		TTTGame game = TTTGame.getGame(gameID);
         		String answer="";
-        		answer+=game.getContentsOfBoard();
-        		answer+=(game.getNextTurnUser().compareTo(user)==0 ? ";1":";0");
-        		answer+=(game.getUser1().compareTo(user)==0 ? ";x":";o");
+        		if(game!=null)
+        		{
+	        		answer+=game.getContentsOfBoard();
+	        		answer+=(game.getNextTurnUser().compareTo(user)==0 ? ";1":";0");
+	        		answer+=(game.getUser1().compareTo(user)==0 ? ";x":";o");
+        		}
         		response.getWriter().print(answer);
         	}
         }
