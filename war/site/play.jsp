@@ -53,6 +53,12 @@
 	<%
 		//Grab contents of specified game.
 		String gameId = request.getParameter("gameID");
+		
+		if(gameId == null || gameId.length()==0)
+		{
+			response.sendRedirect("/view_games.jsp");
+		}
+		
 		//TODO AJAX request for game contents (separated by ,) and
 		//turn (concatenated to game contents by ;)
 		String gameBoardContents = "o, , , ,x,o, ,o,x;1;x";

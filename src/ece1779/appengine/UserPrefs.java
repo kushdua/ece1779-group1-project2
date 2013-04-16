@@ -129,26 +129,26 @@ ErrorMsg
                 userPrefs.setUser(user);
                 userPrefs.setLoggedIn(loggedIn);
                 em.persist(userPrefs);
+                
+                EntityManager em2 = EMF.get().createEntityManager();
+                try {
+        	        TTTGame game = new TTTGame(user.getUserId());
+        	        game.setUser1(user);
+        	        User user2=new User("test2@example.com", "gmail.com");
+        	        game.setUser2(user2);
+        	        game.setAccepted(true);
+        	        game.setActive(true);
+        	        game.setContentsOfBoard("x,,,,,,,,");
+        	        game.addToBoardHistory("x,,,,,,,,,");
+        	        em2.persist(game);
+                }
+                finally
+                {
+                	em2.close();
+                }
             }
         } finally {
             em.close();
-        }
-        
-        em = EMF.get().createEntityManager();
-        try {
-	        TTTGame game = new TTTGame(user.getUserId());
-	        game.setUser1(user);
-	        User user2=new User("test2@example.com", "gmail.com");
-	        game.setUser2(user2);
-	        game.setAccepted(true);
-	        game.setActive(true);
-	        game.setContentsOfBoard("x,,,,,,,,");
-	        game.addToBoardHistory("x,,,,,,,,,");
-	        em.persist(game);
-        }
-        finally
-        {
-        	em.close();
         }
 
         return userPrefs;

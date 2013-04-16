@@ -46,9 +46,9 @@
             <%= (request.getRequestURI().contains("stats.jsp"))?
                     "<li><a href='stats.jsp' class='active'>Statistics</a></li>" : 
                     "<li><a href='stats.jsp'>Statistics</a></li>" %>
-            <%= (request.getRequestURI().contains("play.jsp"))?
+<%--             <%= (request.getRequestURI().contains("play.jsp"))?
                     "<li><a href='play.jsp' class='active'>Play Game</a></li>" : 
-                    "<li><a href='play.jsp'>Play Game</a></li>" %>
+                    "<li><a href='play.jsp'>Play Game</a></li>" %> --%>
             <%= (request.getRequestURI().contains("view_games.jsp"))?
                     "<li><a href='view_games.jsp' class='active'>View Games</a></li>" : 
                     "<li><a href='view_games.jsp'>View Games</a></li>" %>
