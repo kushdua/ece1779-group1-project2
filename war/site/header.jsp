@@ -6,8 +6,13 @@
 <!-- Bootstrap -->
 <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+<link href="fontawesome/css/font-awesome.min.css" rel="stylesheet">
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
+
+<!-- [if eq IE 7]>
+  <link href="fontawesome/css/font-awesome-ie7.min.css" rel="stylesheet">
+<![endif]-->
 
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -30,13 +35,20 @@
    		userPrefs = UserPrefs.getPrefsForUser(user,true);
    		onLoadLoginHandler = "$.post('/AuthenticateUpdate', {userID: '" + user.getEmail() +"', action: 'login'});";
    }
+   else
+   {
+	   if(!request.getRequestURI().contains("welcome.jsp"))
+	   {
+		    response.sendRedirect("/site/welcome.jsp");
+	   }
+   }
 %>
 
 <script type="text/javascript"><%= onLoadLoginHandler %></script>
 
 <div class="navbar navbar-inverse" onload="<%= onLoadLoginHandler %>">
     <div class="navbar-inner">
-        <a class="brand" href="#">ECE1779 AppEngine Project</a>
+        <a class="brand" href="/site/view_games.jsp">ECE1779 AppEngine Project</a>
         <ul class="nav">
             <%= (request==null || (request!=null && request.getRequestURI()==null) ||
                 (request!=null && request.getRequestURI().contains("welcome.jsp")))?

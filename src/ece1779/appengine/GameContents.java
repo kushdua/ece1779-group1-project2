@@ -40,7 +40,7 @@ public class GameContents extends HttpServlet {
         	
         	//Game ID properly passed in at this point.
         	String gameBoardContents = request.getParameter("gameBoardContents");
-        	String gameEnded = request.getParameter("gameEnded");
+        	String gameDone = request.getParameter("gameDone");
         	if(gameBoardContents!=null && gameBoardContents.length()>0)
         	{
         		//Set
@@ -51,9 +51,16 @@ public class GameContents extends HttpServlet {
         			if(game!=null)
         			{
 	        			game.setContentsOfBoard(split[0]);
-	        			game.setNextTurnUser((split[1].compareTo("1")==0 ? game.getUser1() : game.getUser2()));
+	        			if(game.getUser1().compareTo(user)==0)
+	        			{
+	        				game.setNextTurnUser(game.getUser2());
+	        			}
+	        			else
+	        			{
+	        				game.setNextTurnUser(game.getUser1());
+	        			}
 	        			game.addToBoardHistory(split[0]);
-	        			if(gameEnded!=null && gameEnded.length()>0)
+	        			if(gameDone!=null && gameDone.length()>0 && gameDone.compareTo("true")==0)
 	        			{
 	        				game.setActive(false);
 	        				game.setNextTurnUser(null);

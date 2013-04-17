@@ -3,50 +3,72 @@
 <head>
 <title>Play TicTacToe</title>
 <!-- Sign in template from Bootstrap site modified for ECE1779 AWS project -->
+<style>
+#row0Col0 {border-top: 0px; border-right: 2px solid black; border-bottom: 2px solid black; border-left: 0px;}
+#row0Col1 {border-top: 0px; border-right: 2px solid black; border-bottom: 2px solid black; border-left: 2px solid black;}
+#row0Col2 {border-top: 0px; border-right: 0px; border-bottom: 2px solid black; border-left: 2px solid black;}
+#row1Col0 {border-top: 2px solid black; border-right: 2px solid black; border-bottom: 2px solid black; border-left: 0px;}
+#row1Col1 {border-top: 2px solid black; border-right: 2px solid black; border-bottom: 2px solid black; border-left: 2px solid black;}
+#row1Col2 {border-top: 2px solid black; border-right: 0px; border-bottom: 2px solid black; border-left: 2px solid black;}
+#row2Col0 {border-top: 2px solid black; border-right: 2px solid black; border-bottom: 0px; border-left: 0px;}
+#row2Col1 {border-top: 2px solid black; border-right: 2px solid black; border-bottom: 0px; border-left: 2px solid black;}
+#row2Col2 {border-top: 2px solid black; border-right: 0px; border-bottom: 0px; border-left: 2px solid black;}
+li {margin: 0px;}
+</style>
 </head>
-<body onload="setupBoard()">
+<body onload="setupPage(); setupBoard();">
 
 <%@ include file="header.jsp" %>
 
 <!-- if parameter not specified to page, all uploaded images displayed; else only transformations for specified image are displayed by server side script which writes out page -->
 <div class="container">
-	<div class="alert alert-success hidden" id="successContainer">
-		<a class="close" data-dismiss="alert">×</a>
-		<p id="successMessage" />
+    <div id="alertsContainer" style="height:90px;">
+		<div id="successContainer" onload="$('#successContainer').hide();" style="display: none;">
+		   <i id="successIcon" class="icon-ok"></i><span id="successText" style="padding-left: 5px;"></span>
+		</div>
+        <div id="errorContainer" onload="$('#errorContainer').hide();" style="display: none;">
+           <i id="errorIcon" class="icon-delete"></i><span id="errorText" style="padding-left: 5px;"></span>
+        </div>
+        <div id="loadingContainer" onload="$('#loadingContainer').hide();" style="display: none;">
+           <i id="loadingIcon" class="icon-spin icon-spinner"></i><span id="loadingText" style="padding-left: 5px;"></span>
+        </div>
 	</div>
-	<div class="alert alert-error hidden" id="errorContainer">
-		<a class="close" data-dismiss="alert">×</a>
-		<p class= id="error" />
-	</div>
-    <ul class="thumbnails">
+  <div id="gameContainer">
+    <ul id="squaresContainer" class="thumbnails" style="width: 410px; float:left;" onload="$('#statusContainer').css('margin-left',$('#squaresContainer').width()+20);">
 		<li>
-			<a href="#"><img class="span3" id="row0Col0" onClick="cellClickedHandler(0,0)" style="height:100px; width:100px; border:1px solid #021a40;" /></a>
+			<a href="#"><img id="row0Col0" onClick="cellClickedHandler(0,0)" style="height:100px; width:100px; float:left; display:inline;" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row0Col1" onClick="cellClickedHandler(0,1)" style="height:100px; width:100px border:1px solid #021a40;" /></a>
+			<a href="#"><img id="row0Col1" onClick="cellClickedHandler(0,1)" style="height:100px; width:100px; float:left; display:inline;" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row0Col2" onClick="cellClickedHandler(0,2)" style="height:100px; width:100px border:1px solid #021a40;" /></a>
+			<a href="#"><img id="row0Col2" onClick="cellClickedHandler(0,2)" style="height:100px; width:100px; float:left; display:inline;" /></a>
+		</li>
+		<br />
+		<li>
+			<a href="#"><img id="row1Col0" onClick="cellClickedHandler(1,0)" style="height:100px; width:100px; float:left; display:inline;" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row1Col0" onClick="cellClickedHandler(1,0)" style="height:100px; width:100px border:1px solid #021a40;" /></a>
+			<a href="#"><img id="row1Col1" onClick="cellClickedHandler(1,1)" style="height:100px; width:100px; float:left; display:inline;" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row1Col1" onClick="cellClickedHandler(1,1)" style="height:100px; width:100px border:1px solid #021a40;" /></a>
+			<a href="#"><img id="row1Col2" onClick="cellClickedHandler(1,2)" style="height:100px; width:100px; float:left; display:inline;" /></a>
+		</li>
+        <br />
+		<li>
+			<a href="#"><img id="row2Col0" onClick="cellClickedHandler(2,0)" style="height:100px; width:100px; float:left; display:inline;" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row1Col2" onClick="cellClickedHandler(1,2)" style="height:100px; width:100px border:1px solid #021a40;" /></a>
+			<a href="#"><img id="row2Col1" onClick="cellClickedHandler(2,1)" style="height:100px; width:100px; float:left; display:inline;" /></a>
 		</li>
 		<li>
-			<a href="#"><img class="span3" id="row2Col0" onClick="cellClickedHandler(2,0)" style="height:100px; width:100px border:1px solid #021a40;" /></a>
-		</li>
-		<li>
-			<a href="#"><img class="span3" id="row2Col1" onClick="cellClickedHandler(2,1)" style="height:100px; width:100px border:1px solid #021a40;" /></a>
-		</li>
-		<li>
-			<a href="#"><img class="span3" id="row2Col2" onClick="cellClickedHandler(2,2)" style="height:100px; width:100px border:1px solid #021a40;" /></a>
+			<a href="#"><img id="row2Col2" onClick="cellClickedHandler(2,2)" style="height:100px; width:100px; float:left; display:inline;" /></a>
 		</li>
     </ul>
+    <div id="statusContainer" style="float:left;">
+        <span id="turnStatusText" style="font-size: 2em; font-weight: bold;"></span>
+    </div>
+  </div>
 </div> <!-- /container -->
 
 <script type="text/javascript">
@@ -69,33 +91,64 @@
 	getGameBoardContents();
 	var split1 = gameBoardContents.split(";");
 	var gameBoard = split1[0].split(",");
+	var savedAfterPlayGameBoard = null;
 	myTurn = (split1[1]=="1") ? true : false;
 	var myPiece = split1[2];
 	var gameDone = false;
 	var winner = -1;
+	var canCheckNewBoard=true;
 	
 	var imageO = "assets/o.png";
 	var imageX = "assets/x.png";
 	var imageEmpty = "assets/empty.png";
 	
+/* 	//preload images
+	function preload(arrayOfImages) {
+	    $(arrayOfImages).each(function(){
+	        $('<img/>')[0].src = this;
+	        // Alternatively you could use:
+	        // (new Image()).src = this;
+	    });
+	}
+	
+	preload([
+	         imageO,
+	         imageX,
+	         imageEmpty
+	     ]); */
+	     
+	$('<img src="'+imageO+'" />');
+	$('<img src="'+imageX+'" />');
+	$('<img src="'+imageEmpty+'" />');
+	
+	function setupPage()
+	{
+		$('#statusContainer').css('margin-left','20px');
+		$('#statusContainer').css('padding-top', '5px');
+	}
+	
+	//setup board and gameplay functions below
 	function setupBoard()
 	{
-		for(var i=0; i<gameBoard.length; i++)
+		if(gameBoard!=null && gameBoard.length > 0)
 		{
-			if(gameBoard[i]=="o")
+			for(var i=0; i<gameBoard.length; i++)
 			{
-				$("#row"+Math.floor(i/3)+"Col"+i%3).attr('src',imageO);
+				if(gameBoard[i]=="o")
+				{
+					$("#row"+Math.floor(i/3)+"Col"+i%3).attr('src',imageO);
+				}
+				else if(gameBoard[i]=="x")
+				{
+					$("#row"+Math.floor(i/3)+"Col"+i%3).attr('src',imageX);
+				}
+				else if(gameBoard[i]==" ")
+				{
+					$("#row"+Math.floor(i/3)+"Col"+i%3).attr('src',imageEmpty);
+				}
 			}
-			else if(gameBoard[i]=="x")
-			{
-				$("#row"+Math.floor(i/3)+"Col"+i%3).attr('src',imageX);
-			}
-			else if(gameBoard[i]==" ")
-			{
-				$("#row"+Math.floor(i/3)+"Col"+i%3).attr('src',imageEmpty);
-			}
+	 		setTimeout(timerUpdateGameboard, 5000);
 		}
- 		setTimeout(timerUpdateGameboard, 5000);
 	}
 	
 	function timerUpdateGameboard()
@@ -106,11 +159,56 @@
             split1 = gameBoardContents.split(";");
             gameBoard = split1[0].split(",");
             myTurn = (split1[1]=="1") ? true : false;
+            $("#turnStatusText").text("It is " + (myTurn ? "your":"your opponent's") + " turn.");
             myPiece = split1[2];
             setupBoard();
             checkGameEnd();
         }
 	}
+    
+    function hideSuccess()
+    {
+        $("#successContainer").hide(500);
+        $("#successIcon").hide(500);
+        $("#successText").text("");
+    }
+	
+	function showSuccess(message)
+	{
+        $("#successContainer").show(500);
+        $("#successIcon").show(500);
+		$("#successText").text(message);
+        setTimeout(hideSuccess,2000);
+	}
+    
+    function hideError()
+    {
+        $("#errorContainer").hide(500);
+        $("#errorIcon").hide(500);
+        $("#errorText").text("");
+    }
+    
+    function showError(message)
+    {
+        $("#errorContainer").show(500);
+        $("#errorIcon").show(500);
+        $("#errorText").text(message);
+        setTimeout(hideError,2000);
+    }
+    
+    function showLoading(message)
+    {
+        $("#loadingContainer").show(500);
+        $("#loadingIcon").show(500);
+        $("#loadingText").text(message);
+    }
+    
+    function hideLoading()
+    {
+    	$("#loadingContainer").hide(500);
+        $("#loadingIcon").hide(500);
+    	$("#loadingText").text("");
+    }
 	
 	function sendGameBoardContents()
 	{
@@ -119,7 +217,15 @@
 		    url: "GameContents?gameID="+gameID+"&gameBoardContents="+getGameBoardString()+"&gameDone="+gameDone,
 		    async: false,
         }); */
-		$.post("/GameContents", { gameID: gameID, gameBoardContents: getGameBoardString(), gameDone: gameDone } );
+
+        canCheckNewBoard=false;
+        showLoading("Synchronizing game state with server...");
+		$.post("/GameContents", { gameID: gameID, gameBoardContents: getGameBoardString(), gameDone: gameDone } ).done(
+				function(data)
+				{
+			        canCheckNewBoard=true;
+			        setTimeout(hideLoading,2000);
+				});
 	}
     
     function getGameBoardContents()
@@ -129,10 +235,21 @@
             url: "GameContents?gameID="+gameID,
             async: false,
         }).responseText; */
-        if(myTurn==false)
+        if(myTurn==false && !gameDone)
         {
-	        var returnedData = "";
-	        $.post("/GameContents", { gameID: gameID } ).done(function(data){gameBoardContents = data;});
+        	showLoading("Synchronizing game state with server...");
+	        $.post("/GameContents", { gameID: gameID } ).done(
+	        		function(data){
+	        			if(canCheckNewBoard){
+	        				console.log("GBC="+gameBoardContents + ", SAPGB="+savedAfterPlayGameBoard + ", data="+data+"\n");
+	        				//If savedAfterPlayGameBoard is null we didn't play recently (ensure consistency on player screen)
+	        				if(gameBoardContents == "" || savedAfterPlayGameBoard==null || data.split(";")[0]==savedAfterPlayGameBoard.join(",")){
+	        					savedAfterPlayGameBoard=null;
+	        					gameBoardContents = data;
+	        					setTimeout(hideLoading,2000);
+	        				}
+	        			}
+	        		});
         }
     }
 	
@@ -154,39 +271,39 @@
 	
 	function cellClickedHandler(row, col)
 	{
-		if(myTurn===true && gameBoard[row*3+col]===" ")
+		if(myTurn==true && gameBoard[row*3+col]==" ")
 		{
 			//Can add game piece
 			if(myPiece ==="o")
 			{
 				gameBoard[row*3+col]="o";
 				//send to JSP on server
+                myTurn=false;
+                savedAfterPlayGameBoard=gameBoard;
 				sendGameBoardContents();
-				myTurn=false;
 				$("#row"+row+"Col"+col).attr('src',imageO);
 			}
 			else if(myPiece == "x")
 			{
 				gameBoard[row*3+col]="x";
 				//send to JSP on server
+                myTurn=false;
+                savedAfterPlayGameBoard=gameBoard;
                 sendGameBoardContents();
-				myTurn=false;
 				$("#row"+row+"Col"+col).attr('src',imageX);
 			}
-			$("#successContainer").toggleClass("hidden");
-			$("#successMessage").text($("#successMessage").text()+" Successfully played move.\n");
+			showSuccess("Successfully played move.");
 			checkGameEnd();
 		}
 		else
 		{
-			$("#errorContainer").toggleClass("hidden");
 			if(myTurn===false)
 			{
-				$("#error").text($("#error").text()+" It is not your turn yet!\n");
+				showError("It is not your turn yet!");
 			}
-			else if(gameBoard[row][col]!=="")
+			else if(gameBoard[row][col]!==" ")
 			{
-				$("#error").text($("#error").text()+" Cell is not empty.\n");			
+				showError("Cell is not empty.");			
 			}
 		}
 	}
@@ -210,7 +327,7 @@
 				$("#successMessage").text($("#successMessage").text()+"Player " + currPiece + " wins.\n");
 				gameDone=true;
 				sendGameBoardContents();
-				setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
+				setTimeout(new function(){ document.location="view_games.jsp" }, 10000);
 			}
 			//Check that column
 			else if(currPiece!=" " && gameBoard[col]==currPiece && gameBoard[col+3]==currPiece && gameBoard[col+6]==currPiece)
@@ -218,7 +335,7 @@
 				$("#successMessage").text($("#successMessage").text()+"Player " + currPiece + " wins.\n");
                 gameDone=true;
                 sendGameBoardContents();
-				setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
+				setTimeout(new function(){ document.location="view_games.jsp" }, 10000);
 			}
 			//Check diagonal up+right /
 			else if(currPiece!=" " && gameBoard[6]==currPiece && gameBoard[3+1]==currPiece && gameBoard[0+2]==currPiece)
@@ -226,7 +343,7 @@
 				$("#successMessage").text($("#successMessage").text()+"Player " + currPiece + " wins.\n");
                 gameDone=true;
                 sendGameBoardContents();
-				setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
+				setTimeout(new function(){ document.location="view_games.jsp" }, 10000);
 			}
 			//Check diagonal up+left  \
 			else if(currPiece!=" " && gameBoard[6+2]==currPiece && gameBoard[3+1]==currPiece && gameBoard[0]==currPiece)
