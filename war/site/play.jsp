@@ -246,6 +246,7 @@ li {margin: 0px;}
 	        				if(gameBoardContents == "" || savedAfterPlayGameBoard==null || data.split(";")[0]==savedAfterPlayGameBoard.join(",")){
 	        					savedAfterPlayGameBoard=null;
 	        					gameBoardContents = data;
+	        					console.log("Updated game board contents!");
 	        					setTimeout(hideLoading,2000);
 	        				}
 	        			}
@@ -280,6 +281,7 @@ li {margin: 0px;}
 				//send to JSP on server
                 myTurn=false;
                 savedAfterPlayGameBoard=gameBoard;
+                console.log("before sending game board contents; sapgb = " + savedAfterPlayGameBoard);
 				sendGameBoardContents();
 				$("#row"+row+"Col"+col).attr('src',imageO);
 			}
@@ -289,6 +291,7 @@ li {margin: 0px;}
 				//send to JSP on server
                 myTurn=false;
                 savedAfterPlayGameBoard=gameBoard;
+                console.log("before sending game board contents; sapgb = " + savedAfterPlayGameBoard);
                 sendGameBoardContents();
 				$("#row"+row+"Col"+col).attr('src',imageX);
 			}
@@ -315,16 +318,22 @@ li {margin: 0px;}
 		var currPiece="";
 		var row=-1;
 		var col=-1;
+		var hasEmpty=false;
 		for(var i=minBound; i<maxBound; i++)
 		{
 			row=Math.floor(i/3);
 			col=i%3;
 			currPiece=gameBoard[row*3+col];
 			
+			if(currPiece==" ")
+			{
+				hasEmpty=true;
+			}
+			
 			//Check that row
 			if(currPiece!=" " && gameBoard[row*3]==currPiece && gameBoard[row*3+1]==currPiece && gameBoard[row*3+2]==currPiece)
 			{
-				$("#successMessage").text($("#successMessage").text()+"Player " + currPiece + " wins.\n");
+				showSuccess("Player " + currPiece + " wins.");
 				gameDone=true;
 				sendGameBoardContents();
 				setTimeout(new function(){ document.location="view_games.jsp" }, 10000);
@@ -332,7 +341,7 @@ li {margin: 0px;}
 			//Check that column
 			else if(currPiece!=" " && gameBoard[col]==currPiece && gameBoard[col+3]==currPiece && gameBoard[col+6]==currPiece)
 			{
-				$("#successMessage").text($("#successMessage").text()+"Player " + currPiece + " wins.\n");
+				showSuccess("Player " + currPiece + " wins.");
                 gameDone=true;
                 sendGameBoardContents();
 				setTimeout(new function(){ document.location="view_games.jsp" }, 10000);
@@ -340,7 +349,7 @@ li {margin: 0px;}
 			//Check diagonal up+right /
 			else if(currPiece!=" " && gameBoard[6]==currPiece && gameBoard[3+1]==currPiece && gameBoard[0+2]==currPiece)
 			{
-				$("#successMessage").text($("#successMessage").text()+"Player " + currPiece + " wins.\n");
+				showSuccess("Player " + currPiece + " wins.");
                 gameDone=true;
                 sendGameBoardContents();
 				setTimeout(new function(){ document.location="view_games.jsp" }, 10000);
@@ -348,11 +357,19 @@ li {margin: 0px;}
 			//Check diagonal up+left  \
 			else if(currPiece!=" " && gameBoard[6+2]==currPiece && gameBoard[3+1]==currPiece && gameBoard[0]==currPiece)
 			{
-				$("#successMessage").text($("#successMessage").text()+"Player " + currPiece + " wins.\n");
+				showSuccess("Player " + currPiece + " wins.");
                 gameDone=true;
                 sendGameBoardContents();
 				setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
 			}
+		}
+		
+		if(hasEmpty == false)
+		{
+            showSuccess("Game is a tie.");
+            gameDone=true;
+            sendGameBoardContents();
+            setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
 		}
 	}
 </script>

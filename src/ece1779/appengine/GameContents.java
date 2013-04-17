@@ -22,7 +22,7 @@ public class GameContents extends HttpServlet {
 	              HttpServletResponse response)
     throws IOException, ServletException
     {
-		doPost(request, response);
+		response.getWriter().println("GET not supported.");
     }
 
     // Do this because the servlet uses both post and get
@@ -51,21 +51,93 @@ public class GameContents extends HttpServlet {
         			if(game!=null)
         			{
 	        			game.setContentsOfBoard(split[0]);
-	        			if(game.getUser1().compareTo(user)==0)
-	        			{
-	        				game.setNextTurnUser(game.getUser2());
-	        			}
-	        			else
-	        			{
-	        				game.setNextTurnUser(game.getUser1());
-	        			}
 	        			game.addToBoardHistory(split[0]);
-	        			if(gameDone!=null && gameDone.length()>0 && gameDone.compareTo("true")==0)
+	        			boolean gameIsTied = isGameTied(split[0]);
+	        			if(gameIsTied || (gameDone!=null && gameDone.length()>0 && gameDone.compareTo("true")==0))
 	        			{
 	        				game.setActive(false);
 	        				game.setNextTurnUser(null);
-	        				game.setWinner(userService.getCurrentUser());
+	        				
+	        				if(!gameIsTied)
+	        				{
+	        					game.setWinner(user);
+	        				}
+	        				else
+	        				{
+	        					game.setWinner(null);
+	        				}
+	        				
+	        				UserPrefs userDSInfo = UserPrefs.getUserPrefs(user.getEmail());
+	        				if(userDSInfo!=null)
+	        				{
+	        					userDSInfo.setRating(userDSInfo.getRating()+3);
+	        					
+	        					if(!gameIsTied)
+	        					{
+	        						userDSInfo.incrementGamesWon();
+	        					}
+	        					else
+	        					{
+	        						userDSInfo.incrementGamesDrawn();
+	        					}
+	        					
+	        					userDSInfo.save();
+	        				}
+
+	        				UserPrefs user2DSInfo = null;
+	        				if(game.getUser1().compareTo(user)==0)
+	        				{
+	        					user2DSInfo=UserPrefs.getUserPrefs(game.getUser2().getEmail());
+	        					if(user2DSInfo!=null)
+	        					{
+		        					if(!gameIsTied)
+		        					{
+		        						user2DSInfo.incrementGamesLost();
+		        					}
+		        					else
+		        					{
+		        						user2DSInfo.incrementGamesDrawn();
+		        					}
+	        					}
+	        				}
+	        				else if(game.getUser2().compareTo(user)==0)
+	        				{
+	        					user2DSInfo=UserPrefs.getUserPrefs(game.getUser1().getEmail());
+	        					if(user2DSInfo!=null)
+	        					{
+		        					if(!gameIsTied)
+		        					{
+		        						user2DSInfo.incrementGamesLost();
+		        					}
+		        					else
+		        					{
+		        						user2DSInfo.incrementGamesDrawn();
+		        					}
+	        					}
+	        				}
+	        				
+	        				if(user2DSInfo!=null)
+	        				{
+	        					if(!gameIsTied)
+	        					{
+	        						user2DSInfo.setRating(userDSInfo.getRating()-3);
+	        					}
+	        					user2DSInfo.save();
+	        				}
 	        			}
+	        			else
+	        			{
+	        				//Not game end
+		        			if(game.getUser1().compareTo(user)==0)
+		        			{
+		        				game.setNextTurnUser(game.getUser2());
+		        			}
+		        			else
+		        			{
+		        				game.setNextTurnUser(game.getUser1());
+		        			}
+	        			}
+	        			
 	        			game.save();
         			}
         		}
@@ -96,5 +168,18 @@ public class GameContents extends HttpServlet {
         {
         	response.getWriter().println("You are not logged in.");
         }
+    }
+    
+    public boolean isGameTied(String gameBoardContents)
+    {
+    	String[] board = gameBoardContents.split(",");
+    	for(int i=0; i<board.length; i++)
+    	{
+    		if(board[i].compareTo(" ")==0)
+    		{
+    			return false;
+    		}
+    	}
+    	return true;
     }
 }
