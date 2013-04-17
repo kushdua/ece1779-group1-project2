@@ -6,19 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-//import javax.persistence.Query;
+import javax.persistence.Query;
 import javax.servlet.http.*; 
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
-import com.google.appengine.api.datastore.Query.Filter;
-import com.google.appengine.api.datastore.Query.FilterPredicate;
-import com.google.appengine.api.datastore.Query.FilterOperator;
-import com.google.appengine.api.datastore.Query.CompositeFilter;
-import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
-import com.google.appengine.api.datastore.*;
 public class PopulateTestData extends HttpServlet {
 		 /**
 	 * 
@@ -224,7 +218,16 @@ public class PopulateTestData extends HttpServlet {
 	            for (int i=0; i<numOfUsers; i++){
 	            	user2 =users.get(i);
 	            	//to simulate that all other users have invited the current user to a game
-	            	TTTGame game = new TTTGame(user2,user1);
+	            	TTTGame game=null;
+	                try {
+
+	                	game = new TTTGame();
+	                    em.persist(game);
+	                } finally {
+	                    em.close();
+	                }
+	            	game.setUser1(user2);
+	            	game.setUser2(user1);
 	            	//game.setAccepted(true);
 	            	//game.setWinner(((int)Math.random()*50 > 25)?user2:user1);
 	            	game.save();
@@ -272,7 +275,17 @@ public class PopulateTestData extends HttpServlet {
 	            for (int i=0; i<numOfUsers; i++){
 	            	user2 =users.get(i);
 	            	//to simulate that all other users have invited the current user to a game
-	            	TTTGame game = new TTTGame(user2,user1);
+	            	TTTGame game=null;
+	                try {
+
+	                	game = new TTTGame();
+	                    em.persist(game);
+	                } finally {
+	                    em.close();
+	                }
+	            	
+	            	game.setUser1(user2);
+	            	game.setUser2(user1);
 	            	game.setAccepted(true);
 	            	game.setWinner(((int)Math.random()*50 > 25)?user2:user1);
 	            	game.save();

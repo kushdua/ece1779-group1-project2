@@ -32,9 +32,14 @@ public class PlayGame extends HttpServlet  {
 					
 			resp.setContentType("text/html");
        	//response.sendRedirect(request.getRequestURI());
-			if (userAction.equals("accept")){
-				acceptGame(gameId);
-				resp.sendRedirect("/site/play.jsp");
+			if (userAction.equals("accept") || userAction.equals("returnToGame")){
+				acceptOrReturnToGame(gameId,userAction );
+				
+				// for this action, should really redirect to play.jsp , so the following code
+				// should be uncommented 
+				//resp.sendRedirect("/site/play.jsp");
+				resp.sendRedirect("/site/view_games.jsp");
+				
 			}else if (userAction.equals("reject")){
 				rejectGame(gameId);
 		       	resp.sendRedirect("/site/view_games.jsp");
@@ -50,7 +55,7 @@ public class PlayGame extends HttpServlet  {
 			
 			} catch (Exception e) {
 				e.printStackTrace();
-			} 
+			}
 		
 	}
 	
@@ -61,13 +66,15 @@ public class PlayGame extends HttpServlet  {
 		game.save();
 	}
 	
-	private void acceptGame(String gameId)
-	{
+	private void acceptOrReturnToGame(String gameId, String userAction)
+	{		
 		TTTGame game = TTTGame.getGame(gameId);
 		
-		game.setAccepted(true);
-		game.setActive(true);
-		game.save();
+		if (userAction.equals("accept")){
+			game.setAccepted(true);
+			game.setActive(true);
+			game.save();
+		}
 	}
 	
 	private void rematch(User user1, User user2)

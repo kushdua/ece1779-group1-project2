@@ -25,8 +25,71 @@
 <div class="container">
 		<div class="accordion-group">
 			<div class="accordion-heading">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseAutoScale2">
+					Games in Progress
+				</a>
+			</div>
+			 <div id="collapseAutoScale2" class="accordion-body collapse">
+				<table class="table table-striped">
+				    	<tr>
+				    		<th>Game ID</th>
+				    		<th>Opponent</th>
+				    		<th></th>
+				    	</tr>
+<%
+ArrayList<Entity> gamelist2 = Helper.getGamesInProgress();
+int totalGames2 = gamelist2.size();
+Entity en2;
+String key2;
+String gameId2;
+String email2;
+
+UserService usrService2 = UserServiceFactory.getUserService();
+User currentUser2 = usrService2.getCurrentUser();
+User _user1;
+User _user2;
+User opponent2;
+
+for(int i=0;i<totalGames2;i++){
+	en2 = gamelist2.get(i);
+	
+	key2 = en2.getKey().toString();
+	gameId2 = key2.substring(9, key2.length()-2);
+	_user1 = ((User)en2.getProperty("user1"));
+	_user2 = ((User)en2.getProperty("user2"));
+	
+	if (currentUser2.equals(_user1)){
+		opponent2 = _user2;
+	}else{
+		opponent2 = _user1;
+	}
+	
+			
+%>	
+				    	<tr>
+	                      <td><%= gameId2 %></td>
+	        		      <td><%= opponent2 %></td>
+	        		      <td>
+	        		      	<form action="/playgame" method="post">
+	        		      		<input type="hidden" name="gameId" value=<%= gameId2 %>  >
+	        		      		<input type="hidden" name="opponent" value=<%= opponent2 %>  >
+	        		      		<input type="hidden" name="opponentAuthDomain" value=<%= opponent2.getAuthDomain() %>  >
+	        		      		<input type="hidden" name="userAction" value="returnToGame" >
+	        		      		<button class="btn btn-small btn-primary" name="returnToGameBtn" type="submit" >Return to Game</button>
+	        		      	</form>
+	        		      </td>
+                   		</tr>
+                   		
+                   		<%
+                   		}
+                   		%>
+				  </table>
+			</div>
+		</div>
+		<div class="accordion-group">
+			<div class="accordion-heading">
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseManualSet">
-					Available Games
+					Invited Games
 				</a>
 			</div>
 			 <div id="collapseManualSet" class="accordion-body collapse">
@@ -45,7 +108,7 @@ PreparedQuery pq = Helper.getInvitedGames();
 		String email;
 		for (Entity result : pq.asIterable()) {	
 			key = result.getKey().toString();
-			gameId = key.substring(8, key.length()-1);
+			gameId = key.substring(9, key.length()-2);
 			User opponent = ((User)result.getProperty("user1"));
 			
 %>	
@@ -127,7 +190,7 @@ for(int i=0;i<totalGames;i++){
 		winnerId = user1.getEmail();
 	}else if (winner == 2){
 		winnerId = user2.getEmail();
-	}else if (winner == 3){
+	}else if (winner == 0){
 		winnerId = "(Draw)";
 	}
 			
@@ -155,8 +218,7 @@ for(int i=0;i<totalGames;i++){
 		</div>
 		
 			<button class="btn btn-small btn-primary" name="newGameBtn"  onclick="startNewGame()">Start New Game</button>
-		
-	</div>
+	
 </div> <!-- /container -->
 </body>
 </html>
