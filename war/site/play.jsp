@@ -78,7 +78,7 @@ li {margin: 0px;}
 		
 		if(gameId == null || gameId.length()==0)
 		{
-			response.sendRedirect("/view_games.jsp");
+			response.sendRedirect("/site/view_games.jsp");
 		}
 		
 		//TODO AJAX request for game contents (separated by ,) and
