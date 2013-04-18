@@ -103,7 +103,7 @@ for(int i=0;i<totalGames2;i++){
 	en2 = gamelist2.get(i);
 	
 	key2 = en2.getKey().toString();
-	gameId2 = key2.substring(9, key2.length()-2);
+	gameId2 = key2.substring(8, key2.length()-1);
 	_user1 = ((User)en2.getProperty("user1"));
 	_user2 = ((User)en2.getProperty("user2"));
 	
@@ -157,7 +157,7 @@ PreparedQuery pq = Helper.getInvitedGames();
 		String email;
 		for (Entity result : pq.asIterable()) {	
 			key = result.getKey().toString();
-			gameId = key.substring(9, key.length()-2);
+			gameId = key.substring(8, key.length()-1);
 			User opponent = ((User)result.getProperty("user1"));
 			
 %>	
@@ -281,6 +281,7 @@ for(int i=0;i<totalGames;i++){
 		</div>
 		
 			<button class="btn btn-small btn-primary" name="newGameBtn"  onclick="startNewGame()">Start New Game</button>
+						
 	
 	   <div id="replayContainer" style="display: none">
 			<ul id="squaresContainer" class="thumbnails"

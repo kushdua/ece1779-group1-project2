@@ -11,8 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import com.google.appengine.api.users.User;
 
-
-
 @Entity(name = "UserPrefs")
 public class UserPrefs {
 	/*

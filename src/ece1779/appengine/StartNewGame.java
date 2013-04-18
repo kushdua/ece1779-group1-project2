@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
+import ece1779.appengine.UserPrefs;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -58,17 +59,22 @@ public class StartNewGame extends HttpServlet {
         	//Start the game now using TTTGame constructors ... 
 
         	EntityManager em = EMF.get().createEntityManager();
-        	TTTGame game=null;
             try {
 
-            	game = new TTTGame();
+            	TTTGame game = new TTTGame(user1.getUserId());
+            	//TTTGame game = new TTTGame();
+            	game.setUser1(user1);
+            	game.setUser2(user2pref.getUser());
+    	        game.setAccepted(false);
+    	        game.setActive(false);
+    	        game.setNextTurnUser(user2pref.getUser());
+    	        game.setContentsOfBoard(" , , , , , , , , ");
+    	        game.addToBoardHistory(" , , , , , , , , ");
                 em.persist(game);
+
             } finally {
                 em.close();
             }
-        	game.setUser1(user1);
-        	game.setUser2(user2pref.getUser());
-        	game.save();
         }
         else
         {

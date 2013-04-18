@@ -39,9 +39,19 @@
 	    var strSel = "The Value is: " + e.options[e.selectedIndex].value + " and text is: " + e.options[e.selectedIndex].text;
 		
 		$.post("/StartNewGame", { user2: e.options[e.selectedIndex].text } );
-	    
-	    //After invitation is send .. redirect the page to view_games.jsp page
-		window.location="/site/view_games.jsp";
+		<%
+		//Grab contents of specified game.
+		String gameId = request.getParameter("gameID");
+		
+		if(gameId == null || gameId.length()==0)
+		{%>
+			window.location="/view_games.jsp";
+		<%}
+		%>
+		var site = "/site/play.jsp?gameID=";
+	    var gameID = "<%= gameId %>";
+
+		window.location=site+gameID;
 
 	}
 </script>
