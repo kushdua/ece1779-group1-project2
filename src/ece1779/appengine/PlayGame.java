@@ -34,12 +34,7 @@ public class PlayGame extends HttpServlet  {
        	//response.sendRedirect(request.getRequestURI());
 			if (userAction.equals("accept") || userAction.equals("returnToGame")){
 				acceptOrReturnToGame(gameId,userAction );
-				
-				// for this action, should really redirect to play.jsp , so the following code
-				// should be uncommented 
-				//resp.sendRedirect("/site/play.jsp");
-				resp.sendRedirect("/site/view_games.jsp");
-				
+				resp.sendRedirect("/site/play.jsp?gameID="+gameId);
 			}else if (userAction.equals("reject")){
 				rejectGame(gameId);
 		       	resp.sendRedirect("/site/view_games.jsp");

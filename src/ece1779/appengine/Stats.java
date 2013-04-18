@@ -24,7 +24,7 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 
 public class Stats {
 	
-	public static PreparedQuery query()
+	public static PreparedQuery queryUsers()
     {
 
         UserService userService = UserServiceFactory.getUserService();

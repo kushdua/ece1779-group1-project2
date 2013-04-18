@@ -25,7 +25,7 @@ public class GameContents extends HttpServlet {
 		response.getWriter().println("GET not supported.");
     }
 
-    // Do this because the servlet uses both post and get
+    // Do this beca1use the servlet uses both post and get
     public void doPost(HttpServletRequest request,
     		HttpServletResponse response)
     				throws IOException, ServletException {
@@ -140,6 +140,8 @@ public class GameContents extends HttpServlet {
 	        			
 	        			game.save();
         			}
+        			//Let requester know SET (gameboard update) was a success
+        			response.getWriter().println("Success");
         		}
         		else
         		{
@@ -154,7 +156,14 @@ public class GameContents extends HttpServlet {
         		if(game!=null)
         		{
 	        		answer+=game.getContentsOfBoard();
-	        		answer+=(game.getNextTurnUser().compareTo(user)==0 ? ";1":";0");
+	        		if(game.getNextTurnUser()!=null)
+	        		{
+	        			answer+=(game.getNextTurnUser().compareTo(user)==0 ? ";1":";0");
+	        		}
+	        		else
+	        		{
+	        			answer+=";0";
+	        		}
 	        		answer+=(game.getUser1().compareTo(user)==0 ? ";x":";o");
         		}
         		response.getWriter().print(answer);

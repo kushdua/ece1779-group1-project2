@@ -19,6 +19,11 @@
 	{
 		window.location="/site/selectplayer.jsp";
 	}
+	
+	function replayGame(moves)
+	{
+		
+	}
 </script>
 
 <!-- if parameter not specified to page, all uploaded images displayed; else only transformations for specified image are displayed by server side script which writes out page -->
@@ -179,6 +184,18 @@ for(int i=0;i<totalGames;i++){
 	user1 = ((User)en.getProperty("user1"));
 	user2 = ((User)en.getProperty("user2"));
 	winner = (Long)en.getProperty("winner");
+	ArrayList<String> movesArr = (ArrayList<String>)en.getProperty("boardHistory");
+	String moves = "";
+	for(String move : movesArr)
+	{
+		moves+=move+";";
+	}
+	
+	if(moves.length()>0)
+	{
+		//Eliminate last ;
+		moves=moves.substring(0, moves.length()-1);
+	}
 	
 	if (currentUser.equals(user1)){
 		opponent1 = user2;
@@ -200,13 +217,15 @@ for(int i=0;i<totalGames;i++){
 	        		      <td><%= opponent1 %></td>
 	        		      <td><%= winnerId %></td>
 	        		      <td>
-	        		      	<form action="/playgame" method="post">
+	        		      	<form action="/playgame" method="post" style="float:left">
 	        		      		<input type="hidden" name="gameId" value="0"  >
 	        		      		<input type="hidden" name="opponent" value=<%= opponent1 %>  >
 	        		      		<input type="hidden" name="opponentAuthDomain" value=<%= opponent1.getAuthDomain() %>  >
 	        		      		<input type="hidden" name="userAction" value="rematch" >
 	        		      		<button class="btn btn-small btn-primary" name="rematchBtn" type="submit" >Rematch</button>
 	        		      	</form>
+	        		      	<div style="float:left; width:5px; height:5px; display:inline-block;"></div>
+                            <button class="btn btn-small btn-primary" name="replayBtn" style="float:left" onClick="replayGame('<%= moves %>')">Replay</button>
 	        		      </td>
                    		</tr>
                    		

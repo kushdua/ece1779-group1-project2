@@ -157,13 +157,20 @@ public class TTTGame {
 	}
 
 	public void setWinner(User user) {
-		if(user.compareTo(user1)==0)
+		if(user!=null)
 		{
-			winner=1;
+			if(user.compareTo(user1)==0)
+			{
+				winner=1;
+			}
+			else
+			{
+				winner=2;
+			}
 		}
 		else
 		{
-			winner=2;
+			winner=-1;
 		}
 	}
 	
