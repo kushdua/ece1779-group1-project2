@@ -19,10 +19,54 @@
 	{
 		window.location="/site/selectplayer.jsp";
 	}
+    
+    var currentMove = 0;
+    var currentGameMoves = new Array();
 	
-	function replayGame(moves)
+	function setupBoard(gameBoard) {
+		//console.log("updating board with contents " + gameBoard);
+		if (gameBoard != null && gameBoard.length > 0) {
+			for ( var i = 0; i < gameBoard.length; i++) {
+				if (gameBoard[i] == "o") {
+					$("#row" + Math.floor(i / 3) + "Col" + i % 3).attr('src',
+							imageO);
+				} else if (gameBoard[i] == "x") {
+					$("#row" + Math.floor(i / 3) + "Col" + i % 3).attr('src',
+							imageX);
+				} else if (gameBoard[i] == " ") {
+					$("#row" + Math.floor(i / 3) + "Col" + i % 3).attr('src',
+							imageEmpty);
+				}
+			}
+			if (myTurn == false) {
+				setTimeout(timerUpdateGameboard, 5000);
+				setGetTimer = true;
+			}
+		}
+	}
+
+	function goToPrevMove()
 	{
-		
+		if(currentMove-1>=0)
+		{
+			currentMove -= 1;
+			setupBoard(currentGameMoves[currentMove]);
+		}
+	}
+	
+	function goToNextMove()
+	{
+		if(currentMove+1 < currentGameMoves.length)
+		{
+			currentMove += 1;
+			setupBoard(currentGameMoves[currentMove]);
+		}
+	}
+
+	function replayGame(inMoves) {
+		$("#replayContainer").toggle();
+	    currentGameMoves = inMoves.split(";");
+	    setupBoard(moves[0]);
 	}
 </script>
 
@@ -238,6 +282,44 @@ for(int i=0;i<totalGames;i++){
 		
 			<button class="btn btn-small btn-primary" name="newGameBtn"  onclick="startNewGame()">Start New Game</button>
 	
+	   <div id="replayContainer" style="display: none">
+			<ul id="squaresContainer" class="thumbnails"
+				style="width: 410px; float: left;">
+				<li><a href="#"><img id="row0Col0"
+						style="height: 100px; width: 100px; float: left; display: inline;" /></a>
+				</li>
+				<li><a href="#"><img id="row0Col1"
+						style="height: 100px; width: 100px; float: left; display: inline;" /></a>
+				</li>
+				<li><a href="#"><img id="row0Col2"
+						style="height: 100px; width: 100px; float: left; display: inline;" /></a>
+				</li>
+				<br />
+				<li><a href="#"><img id="row1Col0"
+						style="height: 100px; width: 100px; float: left; display: inline;" /></a>
+				</li>
+				<li><a href="#"><img id="row1Col1"
+						style="height: 100px; width: 100px; float: left; display: inline;" /></a>
+				</li>
+				<li><a href="#"><img id="row1Col2"
+						style="height: 100px; width: 100px; float: left; display: inline;" /></a>
+				</li>
+				<br />
+				<li><a href="#"><img id="row2Col0"
+						style="height: 100px; width: 100px; float: left; display: inline;" /></a>
+				</li>
+				<li><a href="#"><img id="row2Col1"
+						style="height: 100px; width: 100px; float: left; display: inline;" /></a>
+				</li>
+				<li><a href="#"><img id="row2Col2"
+						style="height: 100px; width: 100px; float: left; display: inline;" /></a>
+				</li>
+			</ul>
+
+			<i class="icon-circle-arrow-left" onClick="goToPrevMove();"></i>
+            <div style="float:left; width:5px; height:5px; display:inline-block;"></div>
+			<i class="icon-circle-arrow-right" onClick="goToNextMove()"></i>
+		</div>
 </div> <!-- /container -->
 </body>
 </html>

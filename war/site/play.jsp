@@ -27,13 +27,14 @@ li {margin: 0px;}
 		   <i id="successIcon" class="icon-ok"></i><span id="successText" style="padding-left: 5px;"></span>
 		</div>
         <div id="errorContainer" onload="$('#errorContainer').hide();" style="display: none;">
-           <i id="errorIcon" class="icon-delete"></i><span id="errorText" style="padding-left: 5px;"></span>
+           <i id="errorIcon" class="icon-remove"></i><span id="errorText" style="padding-left: 5px;"></span>
         </div>
         <div id="loadingContainer" onload="$('#loadingContainer').hide();" style="display: none;">
            <i id="loadingIcon" class="icon-spin icon-spinner"></i><span id="loadingText" style="padding-left: 5px;"></span>
         </div>
 	</div>
   <div id="gameContainer">
+    <a href="#" class="close" data-dismiss="thumbnails" style="float:right;" onclick="">&times;</a>
     <ul id="squaresContainer" class="thumbnails" style="width: 410px; float:left;" onload="$('#statusContainer').css('margin-left',$('#squaresContainer').width()+20);">
 		<li>
 			<a href="#"><img id="row0Col0" onClick="cellClickedHandler(0,0)" style="height:100px; width:100px; float:left; display:inline;" /></a>

@@ -130,23 +130,24 @@ ErrorMsg
                 userPrefs.setLoggedIn(loggedIn);
                 em.persist(userPrefs);
                 
-                EntityManager em2 = EMF.get().createEntityManager();
-                try {
-        	        TTTGame game = new TTTGame(user.getUserId());
-        	        game.setUser1(user);
-        	        User user2=new User("test2@example.com", "gmail.com");
-        	        game.setUser2(user2);
-        	        game.setAccepted(true);
-        	        game.setActive(true);
-        	        game.setNextTurnUser(user2);
-        	        game.setContentsOfBoard("x, , , , , , , , ");
-        	        game.addToBoardHistory("x, , , , , , , , ");
-        	        em2.persist(game);
-                }
-                finally
-                {
-                	em2.close();
-                }
+                //Auto-create a game between current user and test2@example.com
+//                EntityManager em2 = EMF.get().createEntityManager();
+//                try {
+//        	        TTTGame game = new TTTGame(user.getUserId());
+//        	        game.setUser1(user);
+//        	        User user2=new User("test2@example.com", "gmail.com");
+//        	        game.setUser2(user2);
+//        	        game.setAccepted(true);
+//        	        game.setActive(true);
+//        	        game.setNextTurnUser(user2);
+//        	        game.setContentsOfBoard("x, , , , , , , , ");
+//        	        game.addToBoardHistory("x, , , , , , , , ");
+//        	        em2.persist(game);
+//                }
+//                finally
+//                {
+//                	em2.close();
+//                }
             }
         } finally {
             em.close();

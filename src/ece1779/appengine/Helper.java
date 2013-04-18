@@ -58,6 +58,11 @@ public class Helper {
     }
 	
 	public static ArrayList<Entity> getPreviousGames()
+	{
+		return getPreviousGames(10);
+	}
+	
+	public static ArrayList<Entity> getPreviousGames(int limit)
     {
 
 		UserService userService = UserServiceFactory.getUserService();
@@ -85,7 +90,7 @@ public class Helper {
         // Use PreparedQuery interface to retrieve results
         PreparedQuery pq = datastore.prepare(q);
         
-        List<Entity> games =  pq.asList(FetchOptions.Builder.withLimit(10));
+        List<Entity> games =  pq.asList(FetchOptions.Builder.withLimit(limit));
         ArrayList<Entity> gamelist = new ArrayList<Entity>();
         gamelist.addAll(games);
                 
