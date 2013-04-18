@@ -97,6 +97,8 @@ li {margin: 0px;}
 	var gameDone = false;
 	var winner = -1;
 	var canCheckNewBoard=true;
+	var dataBeingSent = "";
+	var setGetTimer=false;
 	
 	var imageO = "assets/o.png";
 	var imageX = "assets/x.png";
@@ -130,6 +132,7 @@ li {margin: 0px;}
 	//setup board and gameplay functions below
 	function setupBoard()
 	{
+		//console.log("updating board with contents " + gameBoard);
 		if(gameBoard!=null && gameBoard.length > 0)
 		{
 			for(var i=0; i<gameBoard.length; i++)
@@ -147,23 +150,42 @@ li {margin: 0px;}
 					$("#row"+Math.floor(i/3)+"Col"+i%3).attr('src',imageEmpty);
 				}
 			}
-	 		setTimeout(timerUpdateGameboard, 5000);
+			if(myTurn==false)
+			{
+			    setTimeout(timerUpdateGameboard, 5000);
+			    setGetTimer=true;
+			}
 		}
 	}
 	
 	function timerUpdateGameboard()
 	{
-		if(!gameDone)
+		if(setGetTimer==true)
+		{
+			setGetTimer=true;
+		}
+		//console.log("timer update: gameDone="+gameDone + " , myTurn="+myTurn);
+		if(!gameDone && canCheckNewBoard)
         {
+	        //console.log("getting game board contents");
             getGameBoardContents();
-            split1 = gameBoardContents.split(";");
-            gameBoard = split1[0].split(",");
-            myTurn = (split1[1]=="1") ? true : false;
-            $("#turnStatusText").text("It is " + (myTurn ? "your":"your opponent's") + " turn.");
-            myPiece = split1[2];
-            setupBoard();
-            checkGameEnd();
+            //updateGameData();
         }
+	}
+	
+	function updateGameData()
+	{
+        //console.log("timer update with gbc " + gameBoardContents);
+        split1 = gameBoardContents.split(";");
+        gameBoard = split1[0].split(",");
+        myTurn = (split1[1]=="1") ? true : false;
+        //console.log("timer update with myTurn = " + myTurn);
+        $("#turnStatusText").text("It is " + (myTurn ? "your":"your opponent's") + " turn.");
+        myPiece = split1[2];
+        //console.log("setting up board");
+        setupBoard();
+        //console.log("checking end");
+        checkGameEnd();
 	}
     
     function hideSuccess()
@@ -218,14 +240,50 @@ li {margin: 0px;}
 		    async: false,
         }); */
 
-        canCheckNewBoard=false;
-        showLoading("Synchronizing game state with server...");
-		$.post("/GameContents", { gameID: gameID, gameBoardContents: getGameBoardString(), gameDone: gameDone } ).done(
-				function(data)
-				{
-			        canCheckNewBoard=true;
-			        setTimeout(hideLoading,2000);
-				});
+        if(myTurn)
+        {
+	        var gbc=getGameBoardString();
+	        canCheckNewBoard=false;
+	        
+	        if(dataBeingSent!="" && dataBeingSent!=gbc)
+	        {
+	            showLoading("Please wait while we send your move to our servers...");
+		        while(dataBeingSent!="")
+		        {
+		        }
+	            showLoading("Synchronizing game state with server...");
+	        }
+	        else
+	       	{
+	            showLoading("Synchronizing game state with server...");
+	       	}
+	        
+	        if(dataBeingSent=="")
+	        {
+	        	  dataBeingSent=gbc;
+	              if(myTurn==true)
+	              {
+	                  myTurn=false;
+	              }
+	              //console.log("sending data for gameID " + gameID + " of contents " + getGameBoardString() + " and gameDone = " + gameDone);
+	        	  $.post("/GameContents", { gameID: gameID, gameBoardContents: getGameBoardString(), gameDone: gameDone } ).done(
+					function(data)
+					{
+				        //console.log("got game board set contents response of " + data);
+				        updateGameBoardString();
+				        canCheckNewBoard=true;
+				        dataBeingSent="";
+                        updateGameData();
+				        setTimeout(hideLoading,2000);
+					});
+	        }
+
+        }
+	}
+	
+	function updateGameBoardString()
+	{
+		gameBoardContents = gameBoard + (myTurn ? ";1":";0") + ";" + myPiece;
 	}
     
     function getGameBoardContents()
@@ -235,18 +293,21 @@ li {margin: 0px;}
             url: "GameContents?gameID="+gameID,
             async: false,
         }).responseText; */
+        //console.log("getting game board contents");
         if(myTurn==false && !gameDone)
         {
         	showLoading("Synchronizing game state with server...");
 	        $.post("/GameContents", { gameID: gameID } ).done(
 	        		function(data){
-	        			if(canCheckNewBoard){
-	        				console.log("GBC="+gameBoardContents + ", SAPGB="+savedAfterPlayGameBoard + ", data="+data+"\n");
+	        			if(canCheckNewBoard==true){
+	        		        //console.log("got game board contents of" + data);
+	        				//console.log("GBC="+gameBoardContents + ", SAPGB="+savedAfterPlayGameBoard + ", data="+data+"\n");
 	        				//If savedAfterPlayGameBoard is null we didn't play recently (ensure consistency on player screen)
 	        				if(gameBoardContents == "" || savedAfterPlayGameBoard==null || data.split(";")[0]==savedAfterPlayGameBoard.join(",")){
 	        					savedAfterPlayGameBoard=null;
 	        					gameBoardContents = data;
-	        					console.log("Updated game board contents!");
+	        				    //console.log("Updated game board contents!");
+	                            updateGameData();
 	        					setTimeout(hideLoading,2000);
 	        				}
 	        			}
@@ -265,9 +326,14 @@ li {margin: 0px;}
 	        	answer+=",";
 	        }
     	}
-	    answer+=(gameDone?";1":(myTurn?";1":";2"));
-	    answer+=myPiece;
+	    answer+=(gameDone?";1":(myTurn?";1":";0"));
+	    answer+=";"+myPiece;
 	    return answer;
+	}
+	
+	function updateGameBoardContentsString()
+	{
+		gameBoardContents=gameBoard + (myTurn ? ";1":";0") + ";"+myPiece;
 	}
 	
 	function cellClickedHandler(row, col)
@@ -278,25 +344,26 @@ li {margin: 0px;}
 			if(myPiece ==="o")
 			{
 				gameBoard[row*3+col]="o";
-				//send to JSP on server
-                myTurn=false;
+				gameBoardContents = getGameBoardString();
                 savedAfterPlayGameBoard=gameBoard;
-                console.log("before sending game board contents; sapgb = " + savedAfterPlayGameBoard);
-				sendGameBoardContents();
+                //console.log("before sending game board contents; sapgb = " + savedAfterPlayGameBoard + ", gb = " + gameBoard.join(",") + ", gbc = " + gameBoardContents);
 				$("#row"+row+"Col"+col).attr('src',imageO);
 			}
 			else if(myPiece == "x")
 			{
 				gameBoard[row*3+col]="x";
-				//send to JSP on server
-                myTurn=false;
+                gameBoardContents = getGameBoardString();
                 savedAfterPlayGameBoard=gameBoard;
-                console.log("before sending game board contents; sapgb = " + savedAfterPlayGameBoard);
-                sendGameBoardContents();
+                //console.log("before sending game board contents; sapgb = " + savedAfterPlayGameBoard);
 				$("#row"+row+"Col"+col).attr('src',imageX);
 			}
 			showSuccess("Successfully played move.");
 			checkGameEnd();
+			if(!gameDone)
+			{
+		        //console.log("sending board contents from cell clicked handler");
+			 sendGameBoardContents();
+			}
 		}
 		else
 		{
@@ -336,6 +403,7 @@ li {margin: 0px;}
 				showSuccess("Player " + currPiece + " wins.");
 				gameDone=true;
 				sendGameBoardContents();
+				//console.log("Game ended.");
 				setTimeout(new function(){ document.location="view_games.jsp" }, 10000);
 			}
 			//Check that column
@@ -344,6 +412,7 @@ li {margin: 0px;}
 				showSuccess("Player " + currPiece + " wins.");
                 gameDone=true;
                 sendGameBoardContents();
+                //console.log("Game ended.");
 				setTimeout(new function(){ document.location="view_games.jsp" }, 10000);
 			}
 			//Check diagonal up+right /
@@ -352,6 +421,7 @@ li {margin: 0px;}
 				showSuccess("Player " + currPiece + " wins.");
                 gameDone=true;
                 sendGameBoardContents();
+                //console.log("Game ended.");
 				setTimeout(new function(){ document.location="view_games.jsp" }, 10000);
 			}
 			//Check diagonal up+left  \
@@ -360,7 +430,8 @@ li {margin: 0px;}
 				showSuccess("Player " + currPiece + " wins.");
                 gameDone=true;
                 sendGameBoardContents();
-				setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
+                //console.log("Game ended.");
+				setTimeout(new function(){ document.location="view_games.jsp" }, 10000);
 			}
 		}
 		
@@ -369,6 +440,7 @@ li {margin: 0px;}
             showSuccess("Game is a tie.");
             gameDone=true;
             sendGameBoardContents();
+            //console.log("Game ended.");
             setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
 		}
 	}
