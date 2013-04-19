@@ -259,12 +259,48 @@ public class GameContents extends HttpServlet {
     
     public boolean isGameTied(String gameBoardContents)
     {
-    	String[] board = gameBoardContents.split(",");
-    	for(int i=0; i<board.length; i++)
+    	boolean won = false;
+    	String[] gameBoard = gameBoardContents.split(",");
+    	boolean hasEmpty=false;
+    	for(int i=0; i<gameBoard.length; i++)
     	{
-    		if(board[i].compareTo(" ")==0)
+			int row=i/3;
+			int col=i%3;
+			String currPiece=gameBoard[row*3+col];
+			if(currPiece!=" " && gameBoard[row*3]==currPiece && gameBoard[row*3+1]==currPiece && gameBoard[row*3+2]==currPiece)
+			{
+				won=true;
+			}
+			//Check that column
+			else if(currPiece!=" " && gameBoard[col]==currPiece && gameBoard[col+3]==currPiece && gameBoard[col+6]==currPiece)
+			{
+				won=true;
+			}
+			//Check diagonal up+right /
+			else if(currPiece!=" " && gameBoard[6]==currPiece && gameBoard[3+1]==currPiece && gameBoard[0+2]==currPiece)
+			{
+				won=true;
+			}
+			//Check diagonal up+left  \
+			else if(currPiece!=" " && gameBoard[6+2]==currPiece && gameBoard[3+1]==currPiece && gameBoard[0]==currPiece)
+			{
+				won=true;
+			}
+    		if(gameBoard[i].compareTo(" ")==0)
     		{
-    			return false;
+    			hasEmpty=true;
+    		}
+    	}
+    	
+    	if(won)
+    	{
+    		return false;
+    	}
+    	else
+    	{
+    		if(!hasEmpty)
+    		{
+    			return true;
     		}
     	}
     	return true;
