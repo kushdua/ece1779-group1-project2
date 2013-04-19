@@ -63,7 +63,6 @@ public class StartNewGame extends HttpServlet {
         	{
 	        	EntityManager em = EMF.get().createEntityManager();
 	            try {
-	
 	            	TTTGame game = new TTTGame(user1.getUserId());
 	            	if(game!=null)
 	            	{
@@ -71,6 +70,7 @@ public class StartNewGame extends HttpServlet {
 		            	game.setUser2(user2pref.getUser());
 		    	        game.setAccepted(false);
 		    	        game.setActive(false);
+	    	        	game.setNextTurnUser(user1pref.getUser());
 		    	        
 		    	        //Assign random starting player, based on ratings
 		    	        //If you play a much better player, you will have greater chance of going first
@@ -99,6 +99,8 @@ public class StartNewGame extends HttpServlet {
 		    	        //Not necessary - 1st move should not be empty board
 		    	        //game.addToBoardHistory(TTTGame.emptyBoard);
 		                em.persist(game);
+		                
+		                response.getWriter().print(game.getGameId());
 	            	}
 	            	else
 	            	{

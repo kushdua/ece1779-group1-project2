@@ -8,6 +8,7 @@
 <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 <link href="fontawesome/css/font-awesome.min.css" rel="stylesheet">
 <script src="http://code.jquery.com/jquery-latest.js"></script>
+<!-- <script src="http://code.jquery.com/jquery-1.8.3.js"></script> -->
 <script src="bootstrap/js/bootstrap.min.js"></script>
 
 <!-- [if eq IE 7]>

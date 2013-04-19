@@ -23,8 +23,11 @@
         long won=0, lost=0, drawn=0, total=0;
         float percWon=0.0f, percLost=0.0f, percDrawn=0.0f;
         HashMap<String,Integer> wonList = new HashMap<String,Integer>();
+        wonList.put("Nobody", 0);
         HashMap<String,Integer> lostList = new HashMap<String,Integer>();
+        lostList.put("Nobody", 0);
         HashMap<String,Integer> drawnList = new HashMap<String,Integer>();
+        drawnList.put("Nobody", 0);
         String opponentName = "";
         int winner=-1;
         int myUserPos = -1;
