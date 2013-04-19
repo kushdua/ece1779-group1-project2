@@ -267,22 +267,22 @@ public class GameContents extends HttpServlet {
 			int row=i/3;
 			int col=i%3;
 			String currPiece=gameBoard[row*3+col];
-			if(currPiece!=" " && gameBoard[row*3]==currPiece && gameBoard[row*3+1]==currPiece && gameBoard[row*3+2]==currPiece)
+			if(currPiece.compareTo(" ")!=0 && gameBoard[row*3].compareTo(currPiece)==0 && gameBoard[row*3+1].compareTo(currPiece)==0 && gameBoard[row*3+2].compareTo(currPiece)==0)
 			{
 				won=true;
 			}
 			//Check that column
-			else if(currPiece!=" " && gameBoard[col]==currPiece && gameBoard[col+3]==currPiece && gameBoard[col+6]==currPiece)
+			else if(currPiece.compareTo(" ")!=0 && gameBoard[col].compareTo(currPiece)==0 && gameBoard[col+3].compareTo(currPiece)==0 && gameBoard[col+6].compareTo(currPiece)==0)
 			{
 				won=true;
 			}
 			//Check diagonal up+right /
-			else if(currPiece!=" " && gameBoard[6]==currPiece && gameBoard[3+1]==currPiece && gameBoard[0+2]==currPiece)
+			else if(currPiece.compareTo(" ")!=0 && gameBoard[6].compareTo(currPiece)==0 && gameBoard[3+1].compareTo(currPiece)==0 && gameBoard[0+2].compareTo(currPiece)==0)
 			{
 				won=true;
 			}
 			//Check diagonal up+left  \
-			else if(currPiece!=" " && gameBoard[6+2]==currPiece && gameBoard[3+1]==currPiece && gameBoard[0]==currPiece)
+			else if(currPiece.compareTo(" ")!=0 && gameBoard[6+2].compareTo(currPiece)==0 && gameBoard[3+1].compareTo(currPiece)==0 && gameBoard[0].compareTo(currPiece)==0)
 			{
 				won=true;
 			}

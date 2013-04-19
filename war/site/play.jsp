@@ -201,7 +201,10 @@ li {margin: 0px;}
         $("#successContainer").show(500);
         $("#successIcon").show(500);
 		$("#successText").text(message);
-        setTimeout(hideSuccess,2000);
+        if(!gameDone)
+        {
+        	  setTimeout(hideSuccess,2000);
+        }
 	}
     
     function hideError()
@@ -424,15 +427,15 @@ li {margin: 0px;}
 			{
 				if(myTurn)
 				{
+                    gameDone=true;
 					showSuccess("Player " + currPiece + " wins.");
-					gameDone=true;
 					sendGameBoardContents("view_games.jsp");
 					//console.log("Game ended.");
 				}
 				else
 				{
-					showSuccess("Player " + currPiece + " wins.");
                     gameDone=true;
+					showSuccess("Player " + currPiece + " wins.");
                     //setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
 				}
 			}
@@ -441,15 +444,15 @@ li {margin: 0px;}
 			{
 				if(myTurn)
 				{
+                    gameDone=true;
 					showSuccess("Player " + currPiece + " wins.");
-	                gameDone=true;
 	                sendGameBoardContents("view_games.jsp");
 	                //console.log("Game ended.");
                 }
                 else
                 {
-                    showSuccess("Player " + currPiece + " wins.");
                     gameDone=true;
+                    showSuccess("Player " + currPiece + " wins.");
                     //setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
                 }
 			}
@@ -458,15 +461,15 @@ li {margin: 0px;}
 			{
 				if(myTurn)
 				{
+                    gameDone=true;
 					showSuccess("Player " + currPiece + " wins.");
-	                gameDone=true;
 	                sendGameBoardContents("view_games.jsp");
 	                //console.log("Game ended.");
                 }
                 else
                 {
-                    showSuccess("Player " + currPiece + " wins.");
                     gameDone=true;
+                    showSuccess("Player " + currPiece + " wins.");
                     //setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
                 }
 			}
@@ -475,15 +478,15 @@ li {margin: 0px;}
 			{
 				if(myTurn)
 				{
+                    gameDone=true;
 					showSuccess("Player " + currPiece + " wins.");
-	                gameDone=true;
 	                sendGameBoardContents("view_games.jsp");
 	                //console.log("Game ended.");
                 }
                 else
                 {
-                    showSuccess("Player " + currPiece + " wins.");
                     gameDone=true;
+                    showSuccess("Player " + currPiece + " wins.");
                     //setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
                 }
 			}
