@@ -489,7 +489,7 @@ li {margin: 0px;}
 			}
 		}
 		
-		if(hasEmpty == false)
+		if(hasEmpty == false && !gameDone)
 		{
             showSuccess("Game is a tie.");
             gameDone=true;
