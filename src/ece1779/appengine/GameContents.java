@@ -54,7 +54,8 @@ public class GameContents extends HttpServlet {
         			{
         				synchronized(Helper.cacheLockGameContents)
         				{
-        					Helper.cacheRemoveValue(gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX);
+        					Helper.cacheRemoveValue(game.getUser1().getEmail()+"_"+gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX);
+        					Helper.cacheRemoveValue(game.getUser2().getEmail()+"_"+gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX);
 		        			game.setContentsOfBoard(split[0]);
 		        			game.addToBoardHistory(split[0]);
 		        			boolean gameIsTied = isGameTied(split[0]);
@@ -169,12 +170,21 @@ public class GameContents extends HttpServlet {
 		        			}
 		        			
 		        			game.save();
+		        			System.out.println("Saved get from SET on GameContents");
 
-        					Helper.cacheSetValue(game.getUser1().getEmail()+"_"+gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX, game.getContentsOfBoard()+
-        							(game.getNextTurnUser().compareTo(game.getUser1())==0 ? ";1":";0")+";x");
-        					
-        					Helper.cacheSetValue(game.getUser2().getEmail()+"_"+gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX, game.getContentsOfBoard()+
+		        			if(game.getNextTurnUser()!=null)
+		        			{
+	        					Helper.cacheSetValue(game.getUser1().getEmail()+"_"+gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX, game.getContentsOfBoard()+
+	        							(game.getNextTurnUser().compareTo(game.getUser1())==0 ? ";1":";0")+";x");
+	        					
+	        					Helper.cacheSetValue(game.getUser2().getEmail()+"_"+gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX, game.getContentsOfBoard()+
         							(game.getNextTurnUser().compareTo(game.getUser2())==0 ? ";1":";0")+";o");
+		        			}
+		        			else
+		        			{
+		        				Helper.cacheRemoveValue(game.getUser1().getEmail()+"_"+gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX);
+		        				Helper.cacheRemoveValue(game.getUser2().getEmail()+"_"+gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX);
+		        			}
         				}
         			}
         			//Let requester know SET (gameboard update) was a success
@@ -199,27 +209,42 @@ public class GameContents extends HttpServlet {
 				}
         		
         		game=TTTGame.getGame(gameID);
-        		synchronized (Helper.cacheLockGameContents) {
-        			Helper.cacheSetValue(gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX, game.getContentsOfBoard()+
-						(game.getNextTurnUser().compareTo(user)==0 ? ";1":";0")+
-						(game.getUser1().compareTo(user)==0 ? ";x":";o"));
-        		}
-        		
-        		String answer="";
         		if(game!=null)
         		{
-	        		answer+=game.getContentsOfBoard();
 	        		if(game.getNextTurnUser()!=null)
 	        		{
-	        			answer+=(game.getNextTurnUser().compareTo(user)==0 ? ";1":";0");
+		        		synchronized (Helper.cacheLockGameContents) {
+		        			Helper.cacheSetValue(user.getEmail()+"_"+gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX, game.getContentsOfBoard()+
+								(game.getNextTurnUser().compareTo(user)==0 ? ";1":";0")+
+								(game.getUser1().compareTo(user)==0 ? ";x":";o"));
+		        		}
 	        		}
 	        		else
 	        		{
-	        			answer+=";0";
+	    				Helper.cacheRemoveValue(game.getUser1().getEmail()+"_"+gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX);
+	    				Helper.cacheRemoveValue(game.getUser2().getEmail()+"_"+gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX);
 	        		}
-	        		answer+=(game.getUser1().compareTo(user)==0 ? ";x":";o");
+	        		
+	        		String answer="";
+	        		if(game!=null)
+	        		{
+		        		answer+=game.getContentsOfBoard();
+		        		if(game.getNextTurnUser()!=null)
+		        		{
+		        			answer+=(game.getNextTurnUser().compareTo(user)==0 ? ";1":";0");
+		        		}
+		        		else
+		        		{
+		        			answer+=";0";
+		        		}
+		        		answer+=(game.getUser1().compareTo(user)==0 ? ";x":";o");
+	        		}
+	        		response.getWriter().print(answer);
         		}
-        		response.getWriter().print(answer);
+        		else
+        		{
+        			response.getWriter().print("Cannot find game.");
+        		}
         	}
         	else
         	{

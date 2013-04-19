@@ -214,7 +214,8 @@ public class Helper {
 
         	Filter isAccepted = new FilterPredicate("isAccepted",FilterOperator.EQUAL,true);
         	Filter isCompleted = new FilterPredicate("isActive",FilterOperator.EQUAL,false);
-        	Filter winner = new FilterPredicate("winner",FilterOperator.GREATER_THAN,0);
+        	//Include ties too
+        	Filter winner = new FilterPredicate("winner",FilterOperator.GREATER_THAN_OR_EQUAL,-1);
 
         	Filter fltr = CompositeFilterOperator.and(userFilter ,isAccepted, isCompleted, winner );
 
@@ -263,7 +264,7 @@ public class Helper {
 
 			 PreparedQuery pq = datastore.prepare(q);
 
-			 List<Entity> users =  pq.asList(FetchOptions.Builder.withLimit(1000));
+			 List<Entity> users =  pq.asList(FetchOptions.Builder.withLimit(200));
 			 userlist.addAll(users);
 			 
 //			 synchronized(cacheLockUserList)
@@ -311,7 +312,7 @@ public class Helper {
         	// Use PreparedQuery interface to retrieve results
         	PreparedQuery pq = datastore.prepare(q);
 
-        	List<Entity> games =  pq.asList(FetchOptions.Builder.withLimit(1000));
+        	List<Entity> games =  pq.asList(FetchOptions.Builder.withLimit(200));
         	gamelist.addAll(games);
 
     		synchronized(cacheLockGamesInProgress)

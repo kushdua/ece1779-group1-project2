@@ -64,6 +64,7 @@ public class TTTGame {
     public TTTGame(User user1, User user2) {
     	this.user1=user1;
     	this.user2=user2;
+    	this.gameId=String.valueOf(Long.parseLong(user1.getUserId().substring(user1.getUserId().length()-6))+(System.currentTimeMillis()/1000));
     	this.contentsOfBoard=emptyBoard;
     	this.setActive(false);
     	this.setAccepted(false);
@@ -76,7 +77,7 @@ public class TTTGame {
     {
     	this.user1=null;
     	this.user2=null;
-    	this.gameId = gameId;
+    	this.gameId=String.valueOf(Long.parseLong(gameId)+(System.currentTimeMillis()/1000));
     	this.contentsOfBoard=emptyBoard;
     	this.setActive(false);
     	this.setAccepted(false);
@@ -88,6 +89,7 @@ public class TTTGame {
     {
     	this.user1=null;
     	this.user2=null;
+    	this.gameId=String.valueOf((System.currentTimeMillis()/1000));
     	this.contentsOfBoard=emptyBoard;
     	this.setActive(false);
     	this.setAccepted(false);
@@ -217,5 +219,7 @@ public class TTTGame {
 	public void addToBoardHistory(String currentBoard)
 	{
 		boardHistory.add(currentBoard);
+		System.out.println("Added " + currentBoard + " to game " + getGameId() + " history.");
+		save();
 	}
 }

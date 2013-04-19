@@ -233,7 +233,7 @@ li {margin: 0px;}
     	$("#loadingText").text("");
     }
 	
-	function sendGameBoardContents()
+	function sendGameBoardContents(redirectURL)
 	{
 		/* $.ajax({
 		    type: "GET",
@@ -248,6 +248,7 @@ li {margin: 0px;}
 	        
 	        if(dataBeingSent!="" && dataBeingSent!=gbc)
 	        {
+	            console.log("data being sent NOT NULL = " + dataBeingSent);
 	            showLoading("Please wait while we send your move to our servers...");
 		        while(dataBeingSent!="")
 		        {
@@ -259,15 +260,16 @@ li {margin: 0px;}
 	            showLoading("Synchronizing game state with server...");
 	       	}
 	        
+	        console.log("data being sent = " + dataBeingSent);
 	        if(dataBeingSent=="")
 	        {
-	        	  dataBeingSent=gbc;
 	              if(myTurn==true)
 	              {
 	                  myTurn=false;
 	              }
-	              //console.log("sending data for gameID " + gameID + " of contents " + getGameBoardString() + " and gameDone = " + gameDone);
-	        	  $.post("/GameContents", { gameID: gameID, gameBoardContents: getGameBoardString(), gameDone: gameDone } ).done(
+                  dataBeingSent=getGameBoardString();
+	              console.log("sending data for gameID " + gameID + " of contents " + getGameBoardString() + " and gameDone = " + gameDone);
+	        	  $.post("/GameContents", { gameID: gameID, gameBoardContents: dataBeingSent, gameDone: gameDone } ).done(
 					function(data)
 					{
 				        //console.log("got game board set contents response of " + data);
@@ -276,6 +278,11 @@ li {margin: 0px;}
 				        dataBeingSent="";
                         updateGameData();
 				        setTimeout(hideLoading,2000);
+
+				        //if(redirectURL!=null)
+				        //{
+				        //	  setTimeout(new function(){ document.location=redirectURL }, 10000);
+				        //}
 					});
 	        }
 
@@ -285,6 +292,19 @@ li {margin: 0px;}
 	function updateGameBoardString()
 	{
 		gameBoardContents = gameBoard + (myTurn ? ";1":";0") + ";" + myPiece;
+	}
+	
+	function isDataNewerOrSameThanSaved(serverData, savedData)
+	{
+		var newerOrSame=true;
+		for(var i=0; i<savedData.length; i++)
+		{
+		    if(savedData[i]!=serverData[i] && savedData[i]!=" ")
+	    	{
+		    	newerOrSame=false;
+	    	}
+		}
+		return newerOrSame;
 	}
     
     function getGameBoardContents()
@@ -304,7 +324,8 @@ li {margin: 0px;}
 	        		        //console.log("got game board contents of" + data);
 	        				//console.log("GBC="+gameBoardContents + ", SAPGB="+savedAfterPlayGameBoard + ", data="+data+"\n");
 	        				//If savedAfterPlayGameBoard is null we didn't play recently (ensure consistency on player screen)
-	        				if(gameBoardContents == "" || savedAfterPlayGameBoard==null || data.split(";")[0]==savedAfterPlayGameBoard.join(",")){
+	        				if(gameBoardContents == "" || savedAfterPlayGameBoard==null || isDataNewerOrSameThanSaved(data.split(";")[0].split(","), savedAfterPlayGameBoard))
+	        				{	//data.split(";")[0]==savedAfterPlayGameBoard.join(",")){
 	        					savedAfterPlayGameBoard=null;
 	        					gameBoardContents = data;
 	        				    //console.log("Updated game board contents!");
@@ -363,7 +384,7 @@ li {margin: 0px;}
 			if(!gameDone)
 			{
 		        //console.log("sending board contents from cell clicked handler");
-			 sendGameBoardContents();
+			 sendGameBoardContents(null);
 			}
 		}
 		else
@@ -401,38 +422,70 @@ li {margin: 0px;}
 			//Check that row
 			if(currPiece!=" " && gameBoard[row*3]==currPiece && gameBoard[row*3+1]==currPiece && gameBoard[row*3+2]==currPiece)
 			{
-				showSuccess("Player " + currPiece + " wins.");
-				gameDone=true;
-				sendGameBoardContents();
-				//console.log("Game ended.");
-				setTimeout(new function(){ document.location="view_games.jsp" }, 10000);
+				if(myTurn)
+				{
+					showSuccess("Player " + currPiece + " wins.");
+					gameDone=true;
+					sendGameBoardContents("view_games.jsp");
+					//console.log("Game ended.");
+				}
+				else
+				{
+					showSuccess("Player " + currPiece + " wins.");
+                    gameDone=true;
+                    //setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
+				}
 			}
 			//Check that column
 			else if(currPiece!=" " && gameBoard[col]==currPiece && gameBoard[col+3]==currPiece && gameBoard[col+6]==currPiece)
 			{
-				showSuccess("Player " + currPiece + " wins.");
-                gameDone=true;
-                sendGameBoardContents();
-                //console.log("Game ended.");
-				setTimeout(new function(){ document.location="view_games.jsp" }, 10000);
+				if(myTurn)
+				{
+					showSuccess("Player " + currPiece + " wins.");
+	                gameDone=true;
+	                sendGameBoardContents("view_games.jsp");
+	                //console.log("Game ended.");
+                }
+                else
+                {
+                    showSuccess("Player " + currPiece + " wins.");
+                    gameDone=true;
+                    //setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
+                }
 			}
 			//Check diagonal up+right /
 			else if(currPiece!=" " && gameBoard[6]==currPiece && gameBoard[3+1]==currPiece && gameBoard[0+2]==currPiece)
 			{
-				showSuccess("Player " + currPiece + " wins.");
-                gameDone=true;
-                sendGameBoardContents();
-                //console.log("Game ended.");
-				setTimeout(new function(){ document.location="view_games.jsp" }, 10000);
+				if(myTurn)
+				{
+					showSuccess("Player " + currPiece + " wins.");
+	                gameDone=true;
+	                sendGameBoardContents("view_games.jsp");
+	                //console.log("Game ended.");
+                }
+                else
+                {
+                    showSuccess("Player " + currPiece + " wins.");
+                    gameDone=true;
+                    //setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
+                }
 			}
 			//Check diagonal up+left  \
 			else if(currPiece!=" " && gameBoard[6+2]==currPiece && gameBoard[3+1]==currPiece && gameBoard[0]==currPiece)
 			{
-				showSuccess("Player " + currPiece + " wins.");
-                gameDone=true;
-                sendGameBoardContents();
-                //console.log("Game ended.");
-				setTimeout(new function(){ document.location="view_games.jsp" }, 10000);
+				if(myTurn)
+				{
+					showSuccess("Player " + currPiece + " wins.");
+	                gameDone=true;
+	                sendGameBoardContents("view_games.jsp");
+	                //console.log("Game ended.");
+                }
+                else
+                {
+                    showSuccess("Player " + currPiece + " wins.");
+                    gameDone=true;
+                    //setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
+                }
 			}
 		}
 		
@@ -440,9 +493,16 @@ li {margin: 0px;}
 		{
             showSuccess("Game is a tie.");
             gameDone=true;
-            sendGameBoardContents();
+            if(myTurn)
+            {
+                sendGameBoardContents("view_games.jsp");
+            }
+            else
+            {
+            	//setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
+            }
             //console.log("Game ended.");
-            setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
+            //setTimeout(new function(){ document.location="view_games.jsp" }, 5000);
 		}
 	}
 </script>
