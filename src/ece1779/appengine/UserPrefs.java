@@ -117,9 +117,9 @@ public class UserPrefs {
                 userPrefs.setLoggedIn(loggedIn);
                 em.persist(userPrefs);
                 
-                synchronized (Helper.cacheLockUserList) {
-					Helper.cacheRemoveValue(Helper.CACHE_KEY_USER_LIST);
-				}
+//                synchronized (Helper.cacheLockUserList) {
+//                	Helper.cacheInvalidateUserLists();
+//				}
                 
                 //Auto-create a game between current user and test2@example.com
 //                EntityManager em2 = EMF.get().createEntityManager();

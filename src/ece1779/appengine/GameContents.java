@@ -150,10 +150,10 @@ public class GameContents extends HttpServlet {
 		        		        }
 
 		        		        //Invalidate user list because of updated ratings
-		        		        synchronized(Helper.cacheLockUserList)
-		        		        {
-		        		        	Helper.cacheRemoveValue(Helper.CACHE_KEY_USER_LIST);
-		        		        }
+//		        		        synchronized(Helper.cacheLockUserList)
+//		        		        {
+//		        		        	Helper.cacheInvalidateUserLists();
+//		        		        }
 		        			}
 		        			else
 		        			{
@@ -170,9 +170,11 @@ public class GameContents extends HttpServlet {
 		        			
 		        			game.save();
 
-        					Helper.cacheSetValue(gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX, game.getContentsOfBoard()+
-        							(game.getNextTurnUser().compareTo(user)==0 ? ";1":";0")+
-        							(game.getUser1().compareTo(user)==0 ? ";x":";o"));
+        					Helper.cacheSetValue(game.getUser1().getEmail()+"_"+gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX, game.getContentsOfBoard()+
+        							(game.getNextTurnUser().compareTo(game.getUser1())==0 ? ";1":";0")+";x");
+        					
+        					Helper.cacheSetValue(game.getUser2().getEmail()+"_"+gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX, game.getContentsOfBoard()+
+        							(game.getNextTurnUser().compareTo(game.getUser2())==0 ? ";1":";0")+";o");
         				}
         			}
         			//Let requester know SET (gameboard update) was a success
@@ -188,7 +190,7 @@ public class GameContents extends HttpServlet {
         		//Get
         		TTTGame game = null;
         		synchronized (Helper.cacheLockGameContents) {
-        			String ans=(String)Helper.cacheGetValue(gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX);
+        			String ans=(String)Helper.cacheGetValue(user.getEmail()+"_"+gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX);
         			if(ans!=null && ans.length()>0)
         			{
 						response.getWriter().print(ans);

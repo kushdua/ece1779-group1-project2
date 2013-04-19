@@ -34,12 +34,13 @@
         var strSel = "The Value is: " + e.options[e.selectedIndex].value + " and text is: " + e.options[e.selectedIndex].text;
         var gameID = -1;
         //console.log("About to send user2: "+e.options[e.selectedIndex].text+" to /StartNewGame");
-        $.post("/StartNewGame", { user2: e.options[e.selectedIndex].value } ).done(function(data){gameID=data;});
-
-        if(gameID!=-1)
-        {
-            window.location="/site/play.jsp?gameID="+gameID;
-        }
+        $.post("/StartNewGame", { user2: e.options[e.selectedIndex].value } ).done(function(data){
+        	gameID=data;
+        	if(gameID!=-1)
+            {
+                window.location="/site/play.jsp?gameID="+gameID;
+            }
+        });
     }
 </script>
 <body>

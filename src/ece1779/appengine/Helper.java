@@ -6,6 +6,7 @@ package ece1779.appengine;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -35,8 +36,12 @@ public class Helper {
 	private static Cache cache = null;
 	public static final String CACHE_USER_PREV_GAMES_SUFFIX = "_PREVIOUS_GAMES";
 	public static final String CACHE_USER_GAMES_IN_PROGRESS_SUFFIX = "_GAMES_IN_PROGRESS";
+
+	//Cannot store PreparedQuery object for invited games implementation
 //	public static final String CACHE_USER_INVITED_GAMES_SUFFIX = "_INVITED_GAMES";
-	public static final String CACHE_KEY_USER_LIST = "LIST_USERS";
+	
+	//Cannot invalidate list of users for everybody (no keySet, iterator() implementations) once a new user registers
+//	public static final String CACHE_USER_LIST_SUFFIX = "_LIST_USERS";
 	public static final String CACHE_GAME_CONTENTS_SUFFIX = "_GAME_CONTENTS";
 	
 	//Coarse lock for previous games (not per player)
@@ -49,7 +54,7 @@ public class Helper {
 //	public static final Object cacheLockGamesInvited = new Object();
 	
 	//Fine lock (cannot be coarser) for user list
-	public static final Object cacheLockUserList = new Object();
+//	public static final Object cacheLockUserList = new Object();
 	
 	//Coarse lock for all game contents (not per game)
 	public static final Object cacheLockGameContents = new Object();
@@ -115,6 +120,30 @@ public class Helper {
 			cache.remove(key);
 		}
 	}
+	
+//	public static void cacheInvalidateUserLists()
+//	{
+//		if(cache==null)
+//		{
+//			cacheInitIfNeedBe();
+//		}
+//		
+//		if(cache!=null)
+//		{
+//			//TODO: JCache UnsupportedOperationException - need to store userlist as a string or another cache for users and then invalidate
+//			//each user's UserList one by one in this cache...
+//			synchronized (cacheLockUserList) {
+//				HashSet<String> set = (HashSet<String>) cache.entrySet();
+//				for(String key : set)
+//				{
+//					if(key.contains(Helper.CACHE_USER_LIST_SUFFIX))
+//					{
+//						cacheRemoveValue(key);
+//					}
+//				}
+//			}
+//		}
+//	}
 	
 	//public static User currentLoggedInUser = null;
 	
@@ -215,10 +244,10 @@ public class Helper {
 		 User currentUser = userService.getCurrentUser();
 		 ArrayList<Entity> userlist = null;
 
-		 synchronized(cacheLockUserList)
-		 {
-			 userlist=(ArrayList<Entity>) cacheGetValue(Helper.CACHE_KEY_USER_LIST);
-		 }
+//		 synchronized(cacheLockUserList)
+//		 {
+//			 userlist=(ArrayList<Entity>) cacheGetValue(currentUser.getEmail()+Helper.CACHE_USER_LIST_SUFFIX);
+//		 }
 	        
 		 if(userlist==null)
 		 {
@@ -237,10 +266,10 @@ public class Helper {
 			 List<Entity> users =  pq.asList(FetchOptions.Builder.withLimit(1000));
 			 userlist.addAll(users);
 			 
-			 synchronized(cacheLockUserList)
-			 {
-				 cacheSetValue(Helper.CACHE_KEY_USER_LIST, userlist);
-			 }
+//			 synchronized(cacheLockUserList)
+//			 {
+//				 cacheSetValue(currentUser.getEmail()+Helper.CACHE_USER_LIST_SUFFIX, userlist);
+//			 }
 		 }
 
 		 return userlist;
