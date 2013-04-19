@@ -170,7 +170,9 @@ public class GameContents extends HttpServlet {
 		        			
 		        			game.save();
 
-        					Helper.cacheSetValue(gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX, game);
+        					Helper.cacheSetValue(gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX, game.getContentsOfBoard()+
+        							(game.getNextTurnUser().compareTo(user)==0 ? ";1":";0")+
+        							(game.getUser1().compareTo(user)==0 ? ";x":";o"));
         				}
         			}
         			//Let requester know SET (gameboard update) was a success
@@ -186,15 +188,19 @@ public class GameContents extends HttpServlet {
         		//Get
         		TTTGame game = null;
         		synchronized (Helper.cacheLockGameContents) {
-					game=(TTTGame)Helper.cacheGetValue(gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX);
+        			String ans=(String)Helper.cacheGetValue(gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX);
+        			if(ans!=null && ans.length()>0)
+        			{
+						response.getWriter().print(ans);
+						return;
+        			}
 				}
         		
-        		if(game==null)
-        		{
-        			game=TTTGame.getGame(gameID);
-        			synchronized (Helper.cacheLockGameContents) {
-						Helper.cacheSetValue(gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX, game);
-					}
+        		game=TTTGame.getGame(gameID);
+        		synchronized (Helper.cacheLockGameContents) {
+        			Helper.cacheSetValue(gameID+Helper.CACHE_GAME_CONTENTS_SUFFIX, game.getContentsOfBoard()+
+						(game.getNextTurnUser().compareTo(user)==0 ? ";1":";0")+
+						(game.getUser1().compareTo(user)==0 ? ";x":";o"));
         		}
         		
         		String answer="";
