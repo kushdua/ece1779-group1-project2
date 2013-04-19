@@ -159,7 +159,6 @@ PreparedQuery pq = Helper.getInvitedGames();
 			key = result.getKey().toString();
 			gameId = key.substring(8, key.length()-1);
 			User opponent = ((User)result.getProperty("user1"));
-			
 %>	
 						
 				    	<tr>

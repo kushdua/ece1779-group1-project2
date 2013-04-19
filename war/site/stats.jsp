@@ -48,7 +48,6 @@
 	        
 	        ArrayList<Entity> finishedGames = Helper.getPreviousGames(1000);
             
-            
             for(Entity e : finishedGames)
             {
             	//TODO compile into won/lost list and display

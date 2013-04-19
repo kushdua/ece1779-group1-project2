@@ -40,7 +40,7 @@ public class StartNewGame extends HttpServlet {
         
         UserService userService = UserServiceFactory.getUserService();
         User user1 = userService.getCurrentUser();
-        UserPrefs user2pref = null;
+        UserPrefs user1pref=null, user2pref = null;
         
         if(user1!=null)
         {
@@ -49,6 +49,7 @@ public class StartNewGame extends HttpServlet {
         	try
         	{
         		user2email = request.getParameter("user2");
+        		user1pref = UserPrefs.getUserPrefs(user1.getEmail());
         		user2pref = UserPrefs.getUserPrefs(user2email);
         	}
         	catch(NumberFormatException nfe)
@@ -58,23 +59,60 @@ public class StartNewGame extends HttpServlet {
         	}
         	//Start the game now using TTTGame constructors ... 
 
-        	EntityManager em = EMF.get().createEntityManager();
-            try {
-
-            	TTTGame game = new TTTGame(user1.getUserId());
-            	//TTTGame game = new TTTGame();
-            	game.setUser1(user1);
-            	game.setUser2(user2pref.getUser());
-    	        game.setAccepted(false);
-    	        game.setActive(false);
-    	        game.setNextTurnUser(user2pref.getUser());
-    	        game.setContentsOfBoard(" , , , , , , , , ");
-    	        game.addToBoardHistory(" , , , , , , , , ");
-                em.persist(game);
-
-            } finally {
-                em.close();
-            }
+        	if(user1pref!=null && user2pref!=null)
+        	{
+	        	EntityManager em = EMF.get().createEntityManager();
+	            try {
+	
+	            	TTTGame game = new TTTGame(user1.getUserId());
+	            	if(game!=null)
+	            	{
+		            	game.setUser1(user1);
+		            	game.setUser2(user2pref.getUser());
+		    	        game.setAccepted(false);
+		    	        game.setActive(false);
+		    	        
+		    	        //Assign random starting player, based on ratings
+		    	        //If you play a much better player, you will have greater chance of going first
+		    	        int user1Range=user2pref.getRating();
+		    	        if(user1Range<0)
+		    	        {
+		    	        	user1Range=50;
+		    	        }
+		    	        int user2Range=user1Range+user1pref.getRating();
+		    	        if(user2Range<0)
+		    	        {
+		    	        	user2Range=100;
+		    	        }
+		    	        
+		    	        int rand = (int)Math.random()*user2Range;
+		    	        if(rand<=user1Range)
+		    	        {
+		    	        	game.setNextTurnUser(user1pref.getUser());
+		    	        }
+		    	        else if(rand>user1Range && rand<=user2Range)
+		    	        {
+		    	        	game.setNextTurnUser(user2pref.getUser());
+		    	        }
+		    	        
+		    	        game.setContentsOfBoard(TTTGame.emptyBoard);
+		    	        //Not necessary - 1st move should not be empty board
+		    	        //game.addToBoardHistory(TTTGame.emptyBoard);
+		                em.persist(game);
+	            	}
+	            	else
+	            	{
+	            		response.getWriter().println("Cannot create game");
+	            	}
+	
+	            } finally {
+	                em.close();
+	            }
+        	}
+        	else
+        	{
+        		response.getWriter().println("Cannot find users.");
+        	}
         }
         else
         {

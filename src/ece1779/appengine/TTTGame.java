@@ -58,7 +58,7 @@ public class TTTGame {
     private ArrayList<String> boardHistory;
     
     @Transient
-    private String emptyBoard = " , , , , , , , , ";
+    public static String emptyBoard = " , , , , , , , , ";
 
     //Empty game with two users
     public TTTGame(User user1, User user2) {

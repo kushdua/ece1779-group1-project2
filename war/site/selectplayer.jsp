@@ -15,6 +15,13 @@
 <!--[if lt IE 9]>
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+
+    <link href="select2/select2.css" rel="stylesheet"/>
+    <script src="select2/select2.js"></script>
+    <script>
+        $(document).ready(function() { $("#select1").select2(); });
+    </script>
+    
 </head>
 <body>
 

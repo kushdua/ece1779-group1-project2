@@ -13,17 +13,6 @@ import com.google.appengine.api.users.User;
 
 @Entity(name = "UserPrefs")
 public class UserPrefs {
-	/*
-	 username
-( user object)
-nickname
-GamesWon
-GamesDrawn
-GamesLost
-IsLoggedIn
-SuccessMsg
-ErrorMsg
-	 */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String userEmail;
@@ -127,6 +116,10 @@ ErrorMsg
                 userPrefs.setUser(user);
                 userPrefs.setLoggedIn(loggedIn);
                 em.persist(userPrefs);
+                
+                synchronized (Helper.cacheLockUserList) {
+					Helper.cacheRemoveValue(Helper.CACHE_KEY_USER_LIST);
+				}
                 
                 //Auto-create a game between current user and test2@example.com
 //                EntityManager em2 = EMF.get().createEntityManager();

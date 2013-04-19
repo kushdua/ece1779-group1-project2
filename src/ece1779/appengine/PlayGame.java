@@ -33,10 +33,10 @@ public class PlayGame extends HttpServlet  {
 			resp.setContentType("text/html");
        	//response.sendRedirect(request.getRequestURI());
 			if (userAction.equals("accept") || userAction.equals("returnToGame")){
-				acceptOrReturnToGame(gameId,userAction );
+				acceptOrReturnToGame(currentUser.getEmail(), gameId,userAction );
 				resp.sendRedirect("/site/play.jsp?gameID="+gameId);
 			}else if (userAction.equals("reject")){
-				rejectGame(gameId);
+				rejectGame(currentUser.getEmail(), gameId);
 		       	resp.sendRedirect("/site/view_games.jsp");
 			}else if (userAction.equals("rematch")){
 				String opponentAuthDomain = req.getParameter("opponentAuthDomain");
@@ -54,14 +54,18 @@ public class PlayGame extends HttpServlet  {
 		
 	}
 	
-	private void rejectGame(String gameId)
+	private void rejectGame(String userEmail, String gameId)
 	{
 		TTTGame game = TTTGame.getGame(gameId);
 		game.setRejected(true);
 		game.save();
+		
+		synchronized (Helper.cacheLockGamesInvited) {
+			Helper.cacheRemoveValue(userEmail+Helper.CACHE_USER_INVITED_GAMES_SUFFIX);
+		}
 	}
 	
-	private void acceptOrReturnToGame(String gameId, String userAction)
+	private void acceptOrReturnToGame(String userEmail, String gameId, String userAction)
 	{		
 		TTTGame game = TTTGame.getGame(gameId);
 		
@@ -69,6 +73,14 @@ public class PlayGame extends HttpServlet  {
 			game.setAccepted(true);
 			game.setActive(true);
 			game.save();
+			
+			synchronized (Helper.cacheLockGamesInvited) {
+				Helper.cacheRemoveValue(userEmail+Helper.CACHE_USER_INVITED_GAMES_SUFFIX);
+			}
+
+			synchronized (Helper.cacheLockGamesInProgress) {
+				Helper.cacheRemoveValue(userEmail+Helper.CACHE_USER_GAMES_IN_PROGRESS_SUFFIX);
+			}
 		}
 	}
 	
@@ -76,6 +88,11 @@ public class PlayGame extends HttpServlet  {
 	{
 		TTTGame game = new TTTGame(user1, user2);
 		game.save();
+		
+		synchronized (Helper.cacheLockGamesInvited) {
+			Helper.cacheRemoveValue(user1.getEmail()+Helper.CACHE_USER_INVITED_GAMES_SUFFIX);
+			Helper.cacheRemoveValue(user2.getEmail()+Helper.CACHE_USER_INVITED_GAMES_SUFFIX);
+		}
 	}
 	
 	
