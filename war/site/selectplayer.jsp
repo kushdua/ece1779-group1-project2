@@ -8,6 +8,7 @@
 <title>Select New Player</title>
 <!-- Sign in template from Bootstrap site modified for ECE1779 AWS project -->
 <!-- Bootstrap -->
+<%@ include file="header.jsp" %>
 <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 
@@ -25,7 +26,6 @@
 </head>
 <body>
 
-<%@ include file="header.jsp" %>
 
 
 <div class="container">
@@ -70,7 +70,7 @@ Entity en;
 User user1;
 
 %>
-<select id ="select1" size="1" name="names" >
+<select id ="select1">
 <%
 for(int i=0;i<totalUsers;i++) 
 { 
@@ -78,7 +78,7 @@ for(int i=0;i<totalUsers;i++)
 	en=names.get(i);
 	user1=((User)en.getProperty("user"));
 	//TODO make value userID (servlet giving you data needs to give you <userID,userName>)
-	%><option value<%=user1.getEmail()%>><%=user1.getEmail()%></option><%
+	%><option value="<%=user1.getEmail()%>"><%=user1.getEmail()%></option><%
 		
 }
 %>

@@ -10,7 +10,7 @@
 <!-- Sign in template from Bootstrap site modified for ECE1779 AWS project -->
 <!-- Bootstrap -->
 </head>
-<body>
+<body onload="$('#replayContainer').hide();">
 
 <%@ include file="header.jsp" %>
 
@@ -22,6 +22,9 @@
     
     var currentMove = 0;
     var currentGameMoves = new Array();
+    var imageO = "assets/o.png";
+    var imageX = "assets/x.png";
+    var imageEmpty = "assets/empty.png";
 	
 	function setupBoard(gameBoard) {
 		//console.log("updating board with contents " + gameBoard);
@@ -38,10 +41,6 @@
 							imageEmpty);
 				}
 			}
-			if (myTurn == false) {
-				setTimeout(timerUpdateGameboard, 5000);
-				setGetTimer = true;
-			}
 		}
 	}
 
@@ -50,7 +49,16 @@
 		if(currentMove-1>=0)
 		{
 			currentMove -= 1;
-			setupBoard(currentGameMoves[currentMove]);
+			setupBoard(currentGameMoves[currentMove].split(","));
+            if(currentMove<currentGameMoves.length-1)
+            {
+                $('#btnReplayNext').show();
+            }
+            
+            if(currentMove==0)
+            {
+                $('#btnReplayPrev').hide();
+            }
 		}
 	}
 	
@@ -59,14 +67,25 @@
 		if(currentMove+1 < currentGameMoves.length)
 		{
 			currentMove += 1;
-			setupBoard(currentGameMoves[currentMove]);
+			setupBoard(currentGameMoves[currentMove].split(","));
+			if(currentMove==currentGameMoves.length-1)
+			{
+			    $('#btnReplayNext').hide();
+			}
+            
+            if(currentMove>0)
+            {
+                $('#btnReplayPrev').show();
+            }
 		}
 	}
 
 	function replayGame(inMoves) {
 		$("#replayContainer").toggle();
+        $('#btnReplayPrev').hide();
+        currentMove=0;
 	    currentGameMoves = inMoves.split(";");
-	    setupBoard(moves[0]);
+	    setupBoard(currentGameMoves[0].split(","));
 	}
 </script>
 
@@ -281,8 +300,9 @@ for(int i=0;i<totalGames;i++){
 		
 			<button class="btn btn-small btn-primary" name="newGameBtn"  onclick="startNewGame()">Start New Game</button>
 						
-	
-	   <div id="replayContainer" style="display: none">
+	   <br />
+	   <div id="replayContainer">
+            <h2>Replay:</h2>
 			<ul id="squaresContainer" class="thumbnails"
 				style="width: 410px; float: left;">
 				<li><a href="#"><img id="row0Col0"
@@ -316,9 +336,12 @@ for(int i=0;i<totalGames;i++){
 				</li>
 			</ul>
 
-			<i class="icon-circle-arrow-left" onClick="goToPrevMove();"></i>
+			<i id="btnReplayPrev" class="icon-circle-arrow-left icon-4x" style="border: 1px solid black;" onClick="goToPrevMove();"></i>
             <div style="float:left; width:5px; height:5px; display:inline-block;"></div>
-			<i class="icon-circle-arrow-right" onClick="goToNextMove()"></i>
+			<i id="btnReplayNext" class="icon-circle-arrow-right icon-4x" style="border: 1px solid black;" onClick="goToNextMove()"></i>
+            <div style="float:left; width:5px; height:5px; display:inline-block;"></div>
+            <i id="btnReplayClose" class="icon-remove-sign icon-4x" style="border: 1px solid black;" onClick="$('#replayContainer').toggle();"></i>
+            
 		</div>
 </div> <!-- /container -->
 </body>

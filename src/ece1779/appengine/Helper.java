@@ -35,7 +35,7 @@ public class Helper {
 	private static Cache cache = null;
 	public static final String CACHE_USER_PREV_GAMES_SUFFIX = "_PREVIOUS_GAMES";
 	public static final String CACHE_USER_GAMES_IN_PROGRESS_SUFFIX = "_GAMES_IN_PROGRESS";
-	public static final String CACHE_USER_INVITED_GAMES_SUFFIX = "_INVITED_GAMES";
+//	public static final String CACHE_USER_INVITED_GAMES_SUFFIX = "_INVITED_GAMES";
 	public static final String CACHE_KEY_USER_LIST = "LIST_USERS";
 	public static final String CACHE_GAME_CONTENTS_SUFFIX = "_GAME_CONTENTS";
 	
@@ -46,7 +46,7 @@ public class Helper {
 	public static final Object cacheLockGamesInProgress = new Object();
 	
 	//Coarse lock for invited games (not per player)
-	public static final Object cacheLockGamesInvited = new Object();
+//	public static final Object cacheLockGamesInvited = new Object();
 	
 	//Fine lock (cannot be coarser) for user list
 	public static final Object cacheLockUserList = new Object();
@@ -126,9 +126,9 @@ public class Helper {
         User currentUser = userService.getCurrentUser();
         
         PreparedQuery pq = null;
-        synchronized (cacheLockGamesInvited) {
-			pq = (PreparedQuery) Helper.cacheGetValue(currentUser.getEmail()+CACHE_USER_INVITED_GAMES_SUFFIX);
-		}
+//        synchronized (cacheLockGamesInvited) {
+//			pq = (PreparedQuery) Helper.cacheGetValue(currentUser.getEmail()+CACHE_USER_INVITED_GAMES_SUFFIX);
+//		}
         
         if(pq==null)
         {
@@ -148,9 +148,9 @@ public class Helper {
 	        // Use PreparedQuery interface to retrieve results
 	        pq = datastore.prepare(q);
 	        
-	        synchronized (cacheLockGamesInvited) {
-	        	Helper.cacheSetValue(currentUser.getEmail()+CACHE_USER_INVITED_GAMES_SUFFIX, pq);
-			}
+//	        synchronized (cacheLockGamesInvited) {
+//	        	Helper.cacheSetValue(currentUser.getEmail()+CACHE_USER_INVITED_GAMES_SUFFIX, pq);
+//			}
         }
         
         return pq;

@@ -60,9 +60,9 @@ public class PlayGame extends HttpServlet  {
 		game.setRejected(true);
 		game.save();
 		
-		synchronized (Helper.cacheLockGamesInvited) {
-			Helper.cacheRemoveValue(userEmail+Helper.CACHE_USER_INVITED_GAMES_SUFFIX);
-		}
+//		synchronized (Helper.cacheLockGamesInvited) {
+//			Helper.cacheRemoveValue(userEmail+Helper.CACHE_USER_INVITED_GAMES_SUFFIX);
+//		}
 	}
 	
 	private void acceptOrReturnToGame(String userEmail, String gameId, String userAction)
@@ -74,9 +74,9 @@ public class PlayGame extends HttpServlet  {
 			game.setActive(true);
 			game.save();
 			
-			synchronized (Helper.cacheLockGamesInvited) {
-				Helper.cacheRemoveValue(userEmail+Helper.CACHE_USER_INVITED_GAMES_SUFFIX);
-			}
+//			synchronized (Helper.cacheLockGamesInvited) {
+//				Helper.cacheRemoveValue(userEmail+Helper.CACHE_USER_INVITED_GAMES_SUFFIX);
+//			}
 
 			synchronized (Helper.cacheLockGamesInProgress) {
 				Helper.cacheRemoveValue(userEmail+Helper.CACHE_USER_GAMES_IN_PROGRESS_SUFFIX);
@@ -89,10 +89,10 @@ public class PlayGame extends HttpServlet  {
 		TTTGame game = new TTTGame(user1, user2);
 		game.save();
 		
-		synchronized (Helper.cacheLockGamesInvited) {
-			Helper.cacheRemoveValue(user1.getEmail()+Helper.CACHE_USER_INVITED_GAMES_SUFFIX);
-			Helper.cacheRemoveValue(user2.getEmail()+Helper.CACHE_USER_INVITED_GAMES_SUFFIX);
-		}
+//		synchronized (Helper.cacheLockGamesInvited) {
+//			Helper.cacheRemoveValue(user1.getEmail()+Helper.CACHE_USER_INVITED_GAMES_SUFFIX);
+//			Helper.cacheRemoveValue(user2.getEmail()+Helper.CACHE_USER_INVITED_GAMES_SUFFIX);
+//		}
 	}
 	
 	
