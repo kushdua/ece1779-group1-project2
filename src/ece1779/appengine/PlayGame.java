@@ -77,9 +77,11 @@ public class PlayGame extends HttpServlet  {
 //			synchronized (Helper.cacheLockGamesInvited) {
 //				Helper.cacheRemoveValue(userEmail+Helper.CACHE_USER_INVITED_GAMES_SUFFIX);
 //			}
-
+			
+			//Invalidate my + other user's active games list
 			synchronized (Helper.cacheLockGamesInProgress) {
-				Helper.cacheRemoveValue(userEmail+Helper.CACHE_USER_GAMES_IN_PROGRESS_SUFFIX);
+				Helper.cacheRemoveValue(game.getUser1().getEmail()+Helper.CACHE_USER_GAMES_IN_PROGRESS_SUFFIX);
+				Helper.cacheRemoveValue(game.getUser2().getEmail()+Helper.CACHE_USER_GAMES_IN_PROGRESS_SUFFIX);
 			}
 		}
 	}
@@ -87,6 +89,9 @@ public class PlayGame extends HttpServlet  {
 	private void rematch(User user1, User user2)
 	{
 		TTTGame game = new TTTGame(user1, user2);
+		
+		game.setNextTurnUser(user1);
+		
 		game.save();
 		
 //		synchronized (Helper.cacheLockGamesInvited) {

@@ -157,7 +157,7 @@ for(int i=0;i<totalGames2;i++){
 		<div class="accordion-group">
 			<div class="accordion-heading">
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseManualSet">
-					Invited Games
+					Games you are invited to
 				</a>
 			</div>
 			 <div id="collapseManualSet" class="accordion-body collapse">
@@ -168,6 +168,7 @@ for(int i=0;i<totalGames2;i++){
 				    		<th>Opponent</th>
 				    		<th></th>
 				    		<th></th>
+	
 				    	</tr>
 <%
 PreparedQuery pq = Helper.getInvitedGames();

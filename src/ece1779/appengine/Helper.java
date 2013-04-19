@@ -214,7 +214,8 @@ public class Helper {
 
         	Filter isAccepted = new FilterPredicate("isAccepted",FilterOperator.EQUAL,true);
         	Filter isCompleted = new FilterPredicate("isActive",FilterOperator.EQUAL,false);
-        	Filter winner = new FilterPredicate("winner",FilterOperator.GREATER_THAN,0);
+        	//Include ties too
+        	Filter winner = new FilterPredicate("winner",FilterOperator.GREATER_THAN_OR_EQUAL,-1);
 
         	Filter fltr = CompositeFilterOperator.and(userFilter ,isAccepted, isCompleted, winner );
 

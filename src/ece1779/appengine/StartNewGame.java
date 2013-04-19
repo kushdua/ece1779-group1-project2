@@ -63,7 +63,7 @@ public class StartNewGame extends HttpServlet {
         	{
 	        	EntityManager em = EMF.get().createEntityManager();
 	            try {
-	            	TTTGame game = new TTTGame(user1.getUserId());
+	            	TTTGame game = new TTTGame(user1.getUserId().substring(user1.getUserId().length()-6));
 	            	if(game!=null)
 	            	{
 		            	game.setUser1(user1);

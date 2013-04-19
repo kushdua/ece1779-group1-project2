@@ -29,9 +29,9 @@
         HashMap<String,Integer> drawnList = new HashMap<String,Integer>();
         drawnList.put("Nobody", 0);
         String opponentName = "";
-        int winner=-1;
+        long winner=-1;
         int myUserPos = -1;
-        String keyWonMost="", keyLostMost="", keyDrawnMost="";
+        String keyWonMost=" ", keyLostMost=" ", keyDrawnMost=" ";
         int wonMost=0, lostMost=0, drawnMost=0;
         User user1=null, user2=null;
         String email="";
@@ -41,9 +41,9 @@
         {
 			pq = Stats.queryUsers();
 			result = pq.asSingleEntity();
-			won = (Long)result.getProperty("GamesWon")  ;
-			lost = (Long)result.getProperty("GamesLost");
-			drawn = (Long) result.getProperty("GamesDrawn");
+			won = ((Long)result.getProperty("GamesWon")).longValue();
+			lost = ((Long)result.getProperty("GamesLost")).longValue();
+			drawn = ((Long) result.getProperty("GamesDrawn")).longValue();
 			total = won+lost+drawn;
 			percWon = ((total == 0)?0.0f:((float)won*100/total));
 	        percLost = ((total == 0)?0.0f:((float)lost*100/total));
@@ -58,14 +58,14 @@
             	winner=-1;
             	try
             	{
-            		   winner=((Integer)e.getProperty("winner")).intValue();
+            		   winner=((Long)e.getProperty("winner")).longValue();
             	}
             	catch(NumberFormatException nfe)
             	{
             		winner=-1;
             	}
             	
-            	user=(User)e.getProperty("user1");
+            	user1=(User)e.getProperty("user1");
             	user2=(User)e.getProperty("user2");
             	if(user1.compareTo(user)==0)
             	{
@@ -92,7 +92,7 @@
                         val=(wonList.containsKey(email) ? wonList.get(email) : 0);
                         wonList.put(email, ++val);
             		}
-            		else if(winner==0)
+            		else if(winner==-1)
             		{
             			//Draw
                         if(myUserPos==1)
@@ -198,22 +198,18 @@
                 <tr>
                     <th>Action category</th>
                     <th>User Email</th>
-                    <th>Number of Games</th>
                 </tr>
                 <tr>
                     <td>Won the most against</td>
                     <td><%= keyWonMost %></td>
-                    <td><%= wonMost %><%= (wonMost>1)?"games":"game" %></td>
                 </tr>
                 <tr>
                     <td>Lost the most against</td>
                     <td><%= keyLostMost %></td>
-                    <td><%= lostMost %><%= (lostMost>1)?"games":"game" %></td>
                 </tr>
                 <tr>
                     <td>Drawn the most games with</td>
                     <td><%= keyDrawnMost %></td>
-                    <td><%= drawnMost %><%= (drawnMost>1)?"games":"game" %></td>
                 </tr>
             </table>
         </div>
