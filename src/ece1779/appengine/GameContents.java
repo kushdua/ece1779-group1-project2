@@ -303,6 +303,6 @@ public class GameContents extends HttpServlet {
     			return true;
     		}
     	}
-    	return true;
+    	return false;
     }
 }
